@@ -27,6 +27,6 @@ public class LookInnaBookModel {
     }
 
     public void search(String search){
-        System.out.println("test");
+        System.out.println("SearchTest");
     }
 }
