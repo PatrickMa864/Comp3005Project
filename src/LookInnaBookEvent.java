@@ -1,15 +1,16 @@
+import java.util.ArrayList;
 import java.util.EventObject;
 
 public class LookInnaBookEvent extends EventObject {
-    private String outCome;
+    private ArrayList<Book> library;
 
-    public LookInnaBookEvent(LookInnaBookModel model, String outCome) {
+    public LookInnaBookEvent(LookInnaBookModel model, ArrayList<Book> library) {
         super(model);
-        this.outCome = outCome;
+        this.library = library;
     }
 
-    public String getOutCome() {
-        return outCome;
+    public ArrayList<Book> getLibrary() {
+        return library;
     }
 
 }

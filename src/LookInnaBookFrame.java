@@ -43,6 +43,8 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
 
         model = new LookInnaBookModel(library);
 
+        model.addLookInnaBookView(this);
+
 
         LookInnaBookController controller = new LookInnaBookController(model);
 
@@ -117,7 +119,6 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                         JOptionPane.showMessageDialog(null, "Book not found in cart");
                     }
                     model.updateViews();
-
                 }
             });
 
@@ -190,8 +191,10 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
 
 
     public void update(LookInnaBookEvent event) {
+        System.out.println("made it");
+        library = event.getLibrary();
         for(int i = 0; i<library.size(); i++){
-            amountLabel[i].setText(valueOf(library.get(i).getNumCopies()));
+            amountLabel[i].setText("Stock: " + valueOf(library.get(i).getNumCopies()));
         }
 
     }

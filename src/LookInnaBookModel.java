@@ -10,9 +10,13 @@ public class LookInnaBookModel {
         views = new ArrayList<>();
     }
 
+    public void addLookInnaBookView(LookInnaBookFrame frame) {
+        views.add(frame);
+    }
+
     public void updateViews(){
         for (LookInnaBookView view: views){
-            view.update(new LookInnaBookEvent(this, "update"));
+            view.update(new LookInnaBookEvent(this, library));
         }
     }
 
