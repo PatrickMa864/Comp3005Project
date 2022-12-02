@@ -10,11 +10,19 @@ public class LookInnaBookModel {
         views = new ArrayList<>();
     }
 
+    public void updateViews(){
+        for (LookInnaBookView view: views){
+            view.update(new LookInnaBookEvent(this, "update"));
+        }
+    }
+
+
+
     public void addLookInnaBookView(LookInnaBookView v){
         views.add(v);
     }
 
     public void search(String search){
-
+        System.out.println("test");
     }
 }

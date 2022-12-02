@@ -8,27 +8,46 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import static java.lang.String.valueOf;
+
 public class LookInnaBookFrame extends JFrame implements LookInnaBookView, ActionListener {
     private ArrayList<Book> library;
-    private ArrayList<Book> userBasket;
+    private LookInnaBookModel model;
+    private Basket userBasket;
+    private JMenuBar menuBar;
+    private JMenu menu;
+    private JMenuItem m1, m2;
+
+    private JLabel[] amountLabel;
 
     public LookInnaBookFrame(ArrayList<Book> library){
         super("LookInnaBook");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        userBasket = new ArrayList<Book>();
+        userBasket = new Basket();
+
+        menuBar = new JMenuBar();
+        menu = new JMenu("Menu");
+        m1 = new JMenuItem("Search");
+        m2 = new JMenuItem("Checkout");
+        m1.addActionListener(this);
+        m2.addActionListener(this);
+        menu.add(m1);
+        menu.add(m2);
+        menuBar.add(menu);
+        this.setJMenuBar(menuBar);
 
         String[] options = {"User", "Manager"};
         int loginOption = JOptionPane.showOptionDialog(null, "Login as User or Manager?",
                 "Select an Option",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,null, options, options[1]);
 
 
-        LookInnaBookModel model = new LookInnaBookModel(library);
+        model = new LookInnaBookModel(library);
 
 
         LookInnaBookController controller = new LookInnaBookController(model);
 
         this.setTitle("LookInnaBook Store");
-        this.setSize(new Dimension(885, 300));
+        this.setSize(new Dimension(885, 330));
         GridBagConstraints c = new GridBagConstraints();
         JPanel mainPanel = new JPanel(new BorderLayout());
         final JLabel actionLabel = new JLabel("Books available in Store:");
@@ -40,6 +59,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
         JPanel[] bookPanels = new JPanel[numBooks];
         int counter = 0;
 
+        amountLabel = new JLabel[numBooks];
         JLabel headerLabel;
         for(Iterator var12 = library.iterator(); var12.hasNext(); ++counter) {
             final Book book = (Book) var12.next();
@@ -48,7 +68,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             bookPanel2.setBackground(new Color(228, 201, 149));
             bookPanel.setPreferredSize(new Dimension(330, 200));
             headerLabel = new JLabel("Title: " + book.getTitle());
-            final JLabel amountLabel = new JLabel("Stock: " + book.getNumCopies());
+            amountLabel[counter] = new JLabel("Stock: " + book.getNumCopies());
             c.gridwidth = 1;
             c.fill = 0;
             c.ipady = 0;
@@ -59,11 +79,48 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             c.gridx = 0;
             bookPanel2.add(headerLabel, c);
             c.gridx = 2;
-            bookPanel2.add(amountLabel, c);
+            bookPanel2.add(amountLabel[counter], c);
             JButton addButton = new JButton("Add (1) to Cart");
-            addButton.addActionListener(controller);
+            addButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Book b = book;
+                    if(b.getNumCopies()>0) {
+                        b.setNumCopies(b.getNumCopies() - 1);
+                        if(userBasket.hasBook(b.getTitle())){
+                            Book b2 = userBasket.getBook(b.getISBN());
+                            b2.setNumCopies(b2.getNumCopies()+1);
+
+                        }else{
+                            userBasket.getBooks().add(new Book(b.getTitle(),b.getAuthor(),b.getISBN(),b.getPublisher(),b.getPrice(), b.getNumPages(), b.getGenre(), 1,b.getVersion(),b.getPublisherRoyalty()));
+                        }
+
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Book out of stock");
+                    }
+                    model.updateViews();
+
+                }
+            });
             JButton removeButton = new JButton("Remove (1) from Cart");
             removeButton.addActionListener(controller);
+            removeButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Book b = userBasket.getBook(book.getISBN());
+                    if(userBasket.hasBook(book.getTitle())) {
+                        b.setNumCopies(b.getNumCopies() - 1);
+                        book.setNumCopies(book.getNumCopies()+1);
+                        if(b.getNumCopies()==0){
+                            userBasket.removeBook(b.getISBN());
+                        }
+
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Book not found in cart");
+                    }
+                    model.updateViews();
+
+                }
+            });
+
             JButton infoButton = new JButton("?");
             infoButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -92,13 +149,27 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             public void actionPerformed(ActionEvent e) {
                 JOptionPane BasketView = new JOptionPane();
                 JFrame basket = new JFrame("Basket");
-                JOptionPane.showMessageDialog(basket, "VIEWING BASKET:"  + "\n" + printBasket(userBasket) + "\nTOTAL: $" + getTotal(userBasket));
+                JOptionPane.showMessageDialog(basket, "VIEWING BASKET:"  + "\n" + userBasket.printBasket() + "\nTOTAL: $" + userBasket.getTotal());
             }
         });
         c.fill = 2;
-        c.anchor = 19;
-        c.gridx = 0;
+        c.anchor = 17;
+        c.gridx = 1;
         sidePanel.add(viewBasket, c);
+        JButton searchButton = new JButton("Search");
+        searchButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+//                JOptionPane  = new JOptionPane();
+//                JFrame basket = new JFrame("Basket");
+//                JOptionPane.showMessageDialog(basket, "VIEWING BASKET:"  + "\n" + printBasket(userBasket) + "\nTOTAL: $" + getTotal(userBasket));
+            }
+        });
+        c.anchor = 19;
+        c.gridy = 0;
+        JTextField searchText = new JTextField();
+        sidePanel.add(searchText,c);
+        c.gridx = 2;
+        sidePanel.add(searchButton, c);
 
 
         headerLabel = new JLabel("WELCOME TO THE LOOK-INNA-BOOK STORE");
@@ -113,29 +184,29 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
         this.setVisible(true);
     }
 
-    public String printBasket(ArrayList<Book> basket){
-        String output = "";
-        for ( Book b:basket){
-            output += "\""+b.getTitle() +"\" by"+ b.getAuthor().getFirstName()+ " " + b.getAuthor().getLastName()+ "   Quantity:" + b.getNumCopies()+ "\n";
-        }
-        return output;
-    }
 
-    public double getTotal(ArrayList<Book> basket){
-        int output = 0;
-        for ( Book b:basket){
-            output += b.getNumCopies() * b.getPrice();
-        }
-        return output;
-    }
 
-    @Override
+
+
+
     public void update(LookInnaBookEvent event) {
+        for(int i = 0; i<library.size(); i++){
+            amountLabel[i].setText(valueOf(library.get(i).getNumCopies()));
+        }
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
+        String s = e.getActionCommand();
+        switch(s){
+            case "Search":
+                String searchKey = JOptionPane.showInputDialog(null, "Search for:");
+                model.search(searchKey);
+                break;
+            case "Checkout:":
+
+        }
 
     }
 
