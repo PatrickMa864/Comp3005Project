@@ -46,7 +46,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             JPanel bookPanel = new JPanel(new GridLayout());
             JPanel bookPanel2 = new JPanel(new GridBagLayout());
             bookPanel2.setBackground(new Color(228, 201, 149));
-            bookPanel.setPreferredSize(new Dimension(330, 100));
+            bookPanel.setPreferredSize(new Dimension(330, 200));
             headerLabel = new JLabel("Title: " + book.getTitle());
             final JLabel amountLabel = new JLabel("Stock: " + book.getNumCopies());
             c.gridwidth = 1;

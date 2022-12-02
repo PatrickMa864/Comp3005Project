@@ -105,7 +105,7 @@ public class Book {
 
     public String getInfo(){
         return "Title: " + title +
-        "\nAuthor: " + author.getFirstName() + " " + author.getFirstName() +
+        "\nAuthor: " + author.getFirstName() + " " + author.getLastName() +
         "\nISBN: " + ISBN +
         "\nPublisher: " + publisher.getName() +
         "\nPrice: " + price +
