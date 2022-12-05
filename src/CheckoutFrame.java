@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static java.lang.String.valueOf;
 
@@ -40,26 +41,27 @@ public class CheckoutFrame extends JFrame implements ActionListener{
 
     private final User user;
     private final double totalCost;
+    private Basket basket;
 
-    public CheckoutFrame(User user, double totalCost, Basket basket) {
-        // Setup a cart view
+    private LookInnaBookFrame lookInnaBookFrame;
 
-        System.out.println("hihi");
+    private int orderNum = 0;
+
+    public CheckoutFrame(User user, double totalCost, Basket basket, LookInnaBookFrame lookInnaBookFrame) {
+
         JPanel cartPanel = new JPanel();
         JLabel cartLabel = new JLabel("Cart: ");
         cartPanel.setLayout(new BorderLayout());
         cartLabel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
         cartPanel.add(cartLabel, BorderLayout.PAGE_START);
-        // JPanels
+
         JPanel cart = new JPanel(new GridLayout(1, 1));
         JScrollPane currentCart = new JScrollPane(cart,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         currentCart.setMaximumSize(new Dimension(198, 500));
         cartPanel.add(currentCart, BorderLayout.CENTER);
-        //cartPanel.setPreferredSize(cartDimension);
 
-        // Allow the order number to be highlighted and copied
         errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         errorLabel.setMaximumSize(new Dimension(200, 20));
         errorLabel.setEditable(false);
@@ -70,6 +72,8 @@ public class CheckoutFrame extends JFrame implements ActionListener{
         billingProvinceCB.setBackground(Color.WHITE);
         this.user= user;
         this.totalCost = totalCost;
+        this.basket = basket;
+        this.lookInnaBookFrame = lookInnaBookFrame;
         Address address = user.getAddress();
         //ArrayList<Object> userInfo = DatabaseQueries.lookForaUser(username);
         Container c = this.getContentPane();
@@ -79,40 +83,14 @@ public class CheckoutFrame extends JFrame implements ActionListener{
         if (this.getJMenuBar() != null) this.getJMenuBar().setVisible(false);
         c.removeAll();
 
-        // Setup Components
 
-        /* ToolTips */
-        billingStreetNumTF.setToolTipText("Enter the street number for your billing address");
-        billingStreetNameTF.setToolTipText("Enter the street name for your billing address");
-        billingApartmentTF.setToolTipText("Enter the apartment number for your billing address (Optional)");
-        billingCityTF.setToolTipText("Enter the city name for your billing address");
-        billingProvinceCB.setToolTipText("Select the province name for your billing address");
-        billingCountryTF.setToolTipText("Enter the country name for your billing address");
-        billingPostalCodeTF.setToolTipText("Enter the postal code for your billing address (Format: X1X1X1");
-        shippingStreetNumTF.setToolTipText("Enter the street number for your shipping address");
-        shippingStreetNameTF.setToolTipText("Enter the street name for your shipping address");
-        shippingApartmentTF.setToolTipText("Enter the apartment number for your shipping address (Optional)");
-        shippingCityTF.setToolTipText("Enter the city name for your shipping address");
-        shippingProvinceCB.setToolTipText("Select the province name for your shipping address");
-        shippingCountryTF.setToolTipText("Enter the country name for your shipping address");
-        shippingPostalCodeTF.setToolTipText("Enter the postal code for your shipping address (Format: X1X1X1");
-        billingSameAsShipping.setToolTipText("Select this if your shipping address is the same as your billing address");
-        creditCardNumTF.setToolTipText("Enter your 16-digit credit card number, without spaces");
-        creditCardExpTF.setToolTipText("Enter your credit card's expiry date (Format: MMYY)");
-        creditCardCVVTF.setToolTipText("Enter your credit card's 3 digit CVV");
-        cancelOrder.setToolTipText("Return to the store page");
-        submitOrder.setToolTipText("Submit your order to the store");
-
-        /* Panel */
         final GridBagLayout layout = new GridBagLayout();
         JPanel checkoutPanel = new JPanel(layout);
 
-        /* JLabels */
         JLabel totalPriceLabel = new JLabel("Total Price: ", JLabel.RIGHT),
-                userLabel = new JLabel("<html><u>User</u>: " + user.getUserName() + "</html>"),
-                nameLabel = new JLabel("<html><u>Name</u>: " + user.getFirstName() + " " + user.getLastName() + "</html>"),
-                emailLabel = new JLabel("<html><u>Email will be sent to</u>: " + user.getEmail() + "</html>"),
-                // checkout shipping address info
+                userLabel = new JLabel("User: " + user.getUserName() ),
+                nameLabel = new JLabel("Name: " + user.getFirstName() + " " + user.getLastName()),
+                emailLabel = new JLabel("Email: " + user.getEmail() ),
                 shippingLabel = new JLabel("Confirm Shipping Address"),
                 streetNumLabel = new JLabel("*Street Number: "),
                 streetNameLabel = new JLabel("*Street Name: ", JLabel.RIGHT),
@@ -121,7 +99,6 @@ public class CheckoutFrame extends JFrame implements ActionListener{
                 provinceLabel = new JLabel("*Province: ", JLabel.RIGHT),
                 countryLabel = new JLabel("*Country: "),
                 postalCodeLabel = new JLabel("*Postal Code: ", JLabel.RIGHT),
-                //  checkout Billing info
                 billingAddressLabel = new JLabel("Billing Info"),
                 creditCardNumLabel = new JLabel("Credit Card #: "),
                 creditCardExpLabel = new JLabel("EXP: "),
@@ -134,12 +111,9 @@ public class CheckoutFrame extends JFrame implements ActionListener{
                 billingCountryLabel = new JLabel("Country: "),
                 billingPostalCodeLabel = new JLabel("Postal Code: ", JLabel.RIGHT);
 
-        /* Setup checkoutPanel */
-        // Get the addresses of the user.
-        //ArrayList<Object> addresses = DatabaseQueries.lookForanAddressWithID(username);
-        //boolean sameAddress = (user.getAddress().getStreet().equals(addresses.get(8).toString()) && Objects.requireNonNull(addresses).get(6).toString().equals(addresses.get(14).toString()));
+
         boolean sameAddress = true;
-        /* ActionListeners */
+
         cancelOrder.addActionListener(this);
         submitOrder.addActionListener(this);
         billingSameAsShipping.addActionListener(e -> {
@@ -154,7 +128,7 @@ public class CheckoutFrame extends JFrame implements ActionListener{
         });
 
         billingSameAsShipping.setSelected(sameAddress);
-        // Populate the fields with values where appropriate.
+
         if (!sameAddress) {
             billingStreetNumTF.setText(valueOf(address.getStreetNum()));
             billingStreetNameTF.setText(address.getStreet());
@@ -171,8 +145,6 @@ public class CheckoutFrame extends JFrame implements ActionListener{
         shippingProvinceCB.setSelectedItem(address.getProvince());
         shippingCountryTF.setText(address.getCountry());
         shippingPostalCodeTF.setText(address.getPostalCode());
-
-        // Only enable the billing fields if the user has a different billing and shipping address.
         billingStreetNumTF.setEnabled(!sameAddress);
         billingStreetNameTF.setEnabled(!sameAddress);
         billingApartmentTF.setEnabled(!sameAddress);
@@ -181,232 +153,232 @@ public class CheckoutFrame extends JFrame implements ActionListener{
         billingCountryTF.setEnabled(!sameAddress);
         billingPostalCodeTF.setEnabled(!sameAddress);
 
-        GridBagConstraints con = new GridBagConstraints();
+        GridBagConstraints gbc = new GridBagConstraints();
         Dimension spacer = new Dimension(25, 25);
-        con.gridy = 0;
-        con.gridx = 2;
-        con.gridwidth = 8;
+        gbc.gridy = 0;
+        gbc.gridx = 2;
+        gbc.gridwidth = 8;
         errorLabel.setForeground(Color.red);
-        con.fill = GridBagConstraints.HORIZONTAL;
-        con.anchor = GridBagConstraints.CENTER;
-        checkoutPanel.add(errorLabel, con);
-        con.gridx = 0;
-        con.anchor = GridBagConstraints.LINE_START;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(cancelOrder, con);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        checkoutPanel.add(errorLabel, gbc);
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(cancelOrder, gbc);
 
-        con.gridy = 1;
-        con.gridx = 1;
-        con.weightx = 1.0;
-        con.gridwidth = 4;
-        con.anchor = GridBagConstraints.LINE_START;
+        gbc.gridy = 1;
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.LINE_START;
         userLabel.setFont(userLabel.getFont().deriveFont(Font.BOLD));
-        checkoutPanel.add(userLabel, con);
+        checkoutPanel.add(userLabel, gbc);
 
-        con.gridy = 2;
-        con.gridx = 1;
-        con.gridwidth = 4;
+        gbc.gridy = 2;
+        gbc.gridx = 1;
+        gbc.gridwidth = 4;
         nameLabel.setFont(nameLabel.getFont().deriveFont(Font.BOLD));
-        checkoutPanel.add(nameLabel, con);
+        checkoutPanel.add(nameLabel, gbc);
 
-        con.gridy = 3;
-        con.gridx = 1;
-        con.gridwidth = 4;
+        gbc.gridy = 3;
+        gbc.gridx = 1;
+        gbc.gridwidth = 4;
         emailLabel.setFont(emailLabel.getFont().deriveFont(Font.BOLD));
-        checkoutPanel.add(emailLabel, con);
+        checkoutPanel.add(emailLabel, gbc);
 
-        con.gridy = 4;
-        con.gridx = 1;
-        checkoutPanel.add(Box.createRigidArea(spacer), con);
+        gbc.gridy = 4;
+        gbc.gridx = 1;
+        checkoutPanel.add(Box.createRigidArea(spacer), gbc);
 
-        con.gridy = 5;
-        con.gridx = 1;
-        con.gridwidth = 4;
+        gbc.gridy = 5;
+        gbc.gridx = 1;
+        gbc.gridwidth = 4;
         shippingLabel.setFont(shippingLabel.getFont().deriveFont(Font.BOLD));
-        checkoutPanel.add(shippingLabel, con);
+        checkoutPanel.add(shippingLabel, gbc);
 
-        con.gridy = 6;
-        con.gridx = 1;
-        con.gridwidth = 1;
-        checkoutPanel.add(streetNumLabel, con);
-        con.gridx = 2;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(shippingStreetNumTF, con);
-        con.gridx = 3;
-        con.fill = GridBagConstraints.HORIZONTAL;
-        checkoutPanel.add(streetNameLabel, con);
-        con.gridx = 4;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(shippingStreetNameTF, con);
-        con.gridx = 5;
-        con.fill = GridBagConstraints.HORIZONTAL;
-        checkoutPanel.add(apartmentLabel, con);
-        con.gridx = 6;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(shippingApartmentTF, con);
+        gbc.gridy = 6;
+        gbc.gridx = 1;
+        gbc.gridwidth = 1;
+        checkoutPanel.add(streetNumLabel, gbc);
+        gbc.gridx = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(shippingStreetNumTF, gbc);
+        gbc.gridx = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        checkoutPanel.add(streetNameLabel, gbc);
+        gbc.gridx = 4;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(shippingStreetNameTF, gbc);
+        gbc.gridx = 5;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        checkoutPanel.add(apartmentLabel, gbc);
+        gbc.gridx = 6;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(shippingApartmentTF, gbc);
 
-        con.gridy = 7;
-        con.gridx = 1;
-        con.gridwidth = 1;
-        con.fill = GridBagConstraints.HORIZONTAL;
-        checkoutPanel.add(cityLabel, con);
-        con.gridx = 4;
-        checkoutPanel.add(provinceLabel, con);
-        con.gridx = 2;
-        con.gridwidth = 2;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(shippingCityTF, con);
-        con.gridx = 5;
-        con.gridwidth = 1;
-        checkoutPanel.add(shippingProvinceCB, con);
+        gbc.gridy = 7;
+        gbc.gridx = 1;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        checkoutPanel.add(cityLabel, gbc);
+        gbc.gridx = 4;
+        checkoutPanel.add(provinceLabel, gbc);
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(shippingCityTF, gbc);
+        gbc.gridx = 5;
+        gbc.gridwidth = 1;
+        checkoutPanel.add(shippingProvinceCB, gbc);
 
-        con.gridy = 8;
-        con.gridx = 1;
-        con.gridwidth = 1;
-        con.fill = GridBagConstraints.HORIZONTAL;
-        checkoutPanel.add(countryLabel, con);
-        con.gridx = 4;
-        checkoutPanel.add(postalCodeLabel, con);
-        con.gridx = 2;
-        con.gridwidth = 2;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(shippingCountryTF, con);
-        con.gridx = 5;
-        con.gridwidth = 1;
-        con.anchor = GridBagConstraints.LINE_START;
-        checkoutPanel.add(shippingPostalCodeTF, con);
+        gbc.gridy = 8;
+        gbc.gridx = 1;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        checkoutPanel.add(countryLabel, gbc);
+        gbc.gridx = 4;
+        checkoutPanel.add(postalCodeLabel, gbc);
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(shippingCountryTF, gbc);
+        gbc.gridx = 5;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        checkoutPanel.add(shippingPostalCodeTF, gbc);
 
-        con.gridy = 9;
-        con.gridx = 1;
-        checkoutPanel.add(Box.createRigidArea(spacer), con);
+        gbc.gridy = 9;
+        gbc.gridx = 1;
+        checkoutPanel.add(Box.createRigidArea(spacer), gbc);
 
-        con.gridy = 10;
-        con.gridx = 1;
-        con.gridwidth = 3;
-        con.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridy = 10;
+        gbc.gridx = 1;
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         billingAddressLabel.setFont(billingAddressLabel.getFont().deriveFont(Font.BOLD));
-        checkoutPanel.add(billingAddressLabel, con);
-        con.gridx = 3;
-        checkoutPanel.add(billingSameAsShipping, con);
+        checkoutPanel.add(billingAddressLabel, gbc);
+        gbc.gridx = 3;
+        checkoutPanel.add(billingSameAsShipping, gbc);
 
-        con.gridy = 11;
-        con.gridx = 1;
-        con.gridwidth = 1;
-        checkoutPanel.add(creditCardNumLabel, con);
-        con.gridx = 2;
-        con.gridwidth = 3;
+        gbc.gridy = 11;
+        gbc.gridx = 1;
+        gbc.gridwidth = 1;
+        checkoutPanel.add(creditCardNumLabel, gbc);
+        gbc.gridx = 2;
+        gbc.gridwidth = 3;
         //  checkout Billing info
-        checkoutPanel.add(creditCardNumTF, con);
+        checkoutPanel.add(creditCardNumTF, gbc);
 
-        con.gridy = 12;
-        con.gridx = 1;
-        con.gridwidth = 1;
-        con.fill = GridBagConstraints.HORIZONTAL;
-        checkoutPanel.add(creditCardExpLabel, con);
-        con.gridx = 2;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(creditCardExpTF, con);
-        con.gridx = 3;
-        con.fill = GridBagConstraints.HORIZONTAL;
-        checkoutPanel.add(creditCardCVV, con);
-        con.gridx = 4;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(creditCardCVVTF, con);
+        gbc.gridy = 12;
+        gbc.gridx = 1;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        checkoutPanel.add(creditCardExpLabel, gbc);
+        gbc.gridx = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(creditCardExpTF, gbc);
+        gbc.gridx = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        checkoutPanel.add(creditCardCVV, gbc);
+        gbc.gridx = 4;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(creditCardCVVTF, gbc);
 
-        con.gridy = 13;
-        con.gridx = 1;
-        checkoutPanel.add(Box.createRigidArea(spacer), con);
+        gbc.gridy = 13;
+        gbc.gridx = 1;
+        checkoutPanel.add(Box.createRigidArea(spacer), gbc);
 
-        con.gridy = 14;
-        con.gridx = 1;
-        con.gridwidth = 1;
-        con.fill = GridBagConstraints.HORIZONTAL;
-        checkoutPanel.add(billingStreetNumLabel, con);
-        con.gridx = 2;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(billingStreetNumTF, con);
-        con.gridx = 3;
-        con.fill = GridBagConstraints.HORIZONTAL;
-        checkoutPanel.add(billingStreetNameLabel, con);
-        con.gridx = 4;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(billingStreetNameTF, con);
-        con.gridx = 5;
-        con.fill = GridBagConstraints.HORIZONTAL;
-        checkoutPanel.add(billingApartmentLabel, con);
-        con.gridx = 6;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(billingApartmentTF, con);
+        gbc.gridy = 14;
+        gbc.gridx = 1;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        checkoutPanel.add(billingStreetNumLabel, gbc);
+        gbc.gridx = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(billingStreetNumTF, gbc);
+        gbc.gridx = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        checkoutPanel.add(billingStreetNameLabel, gbc);
+        gbc.gridx = 4;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(billingStreetNameTF, gbc);
+        gbc.gridx = 5;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        checkoutPanel.add(billingApartmentLabel, gbc);
+        gbc.gridx = 6;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(billingApartmentTF, gbc);
 
-        con.gridy = 15;
-        con.gridx = 1;
-        con.gridwidth = 1;
-        con.fill = GridBagConstraints.HORIZONTAL;
-        checkoutPanel.add(billingCityLabel, con);
-        con.gridx = 4;
-        checkoutPanel.add(billingProvinceLabel, con);
-        con.gridx = 2;
-        con.gridwidth = 2;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(billingCityTF, con);
-        con.gridx = 5;
-        con.gridwidth = 1;
-        checkoutPanel.add(billingProvinceCB, con);
+        gbc.gridy = 15;
+        gbc.gridx = 1;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        checkoutPanel.add(billingCityLabel, gbc);
+        gbc.gridx = 4;
+        checkoutPanel.add(billingProvinceLabel, gbc);
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(billingCityTF, gbc);
+        gbc.gridx = 5;
+        gbc.gridwidth = 1;
+        checkoutPanel.add(billingProvinceCB, gbc);
 
-        con.gridy = 16;
-        con.gridx = 1;
-        con.gridwidth = 1;
-        con.fill = GridBagConstraints.HORIZONTAL;
-        checkoutPanel.add(billingCountryLabel, con);
-        con.gridx = 4;
-        checkoutPanel.add(billingPostalCodeLabel, con);
-        con.gridx = 2;
-        con.gridwidth = 2;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(billingCountryTF, con);
-        con.gridx = 5;
-        con.gridwidth = 1;
-        con.anchor = GridBagConstraints.LINE_START;
-        checkoutPanel.add(billingPostalCodeTF, con);
+        gbc.gridy = 16;
+        gbc.gridx = 1;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        checkoutPanel.add(billingCountryLabel, gbc);
+        gbc.gridx = 4;
+        checkoutPanel.add(billingPostalCodeLabel, gbc);
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(billingCountryTF, gbc);
+        gbc.gridx = 5;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        checkoutPanel.add(billingPostalCodeTF, gbc);
 
-        con.gridy = 17;
-        con.gridx = 1;
-        checkoutPanel.add(Box.createRigidArea(spacer), con);
+        gbc.gridy = 17;
+        gbc.gridx = 1;
+        checkoutPanel.add(Box.createRigidArea(spacer), gbc);
 
-        con.gridy = 18;
-        con.gridx = 4;
-        con.gridwidth = 1;
-        con.anchor = GridBagConstraints.LINE_END;
-        con.fill = GridBagConstraints.HORIZONTAL;
-        checkoutPanel.add(totalPriceLabel, con);
-        con.gridx = 5;
-        con.anchor = GridBagConstraints.CENTER;
-        // JLabels
+        gbc.gridy = 18;
+        gbc.gridx = 4;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        checkoutPanel.add(totalPriceLabel, gbc);
+        gbc.gridx = 5;
+        gbc.anchor = GridBagConstraints.CENTER;
+
         JLabel checkoutTotalPriceValueLabel = new JLabel(valueOf(totalCost), JLabel.CENTER);
-        checkoutPanel.add(checkoutTotalPriceValueLabel, con);
-        con.gridwidth = 2;
-        con.gridx = 6;
-        con.anchor = GridBagConstraints.LINE_END;
-        con.fill = GridBagConstraints.NONE;
-        checkoutPanel.add(submitOrder, con);
+        checkoutPanel.add(checkoutTotalPriceValueLabel, gbc);
+        gbc.gridwidth = 2;
+        gbc.gridx = 6;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        gbc.fill = GridBagConstraints.NONE;
+        checkoutPanel.add(submitOrder, gbc);
 
-        con.gridy = 19;
-        con.gridx = 5;
-        con.gridwidth = 2;
-        con.anchor = GridBagConstraints.LINE_END;
+        gbc.gridy = 19;
+        gbc.gridx = 5;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.LINE_END;
         JLabel checkoutSuccessLabel = new JLabel("", JLabel.CENTER);
-        checkoutPanel.add(checkoutSuccessLabel, con);
+        checkoutPanel.add(checkoutSuccessLabel, gbc);
 
-        con.gridy = 20; // shift everything to the top and center
-        con.gridx = 0;
-        con.weighty = 1.0;
-        con.weightx = 1.0;
-        con.gridwidth = 1;
-        con.anchor = GridBagConstraints.CENTER;
-        con.fill = GridBagConstraints.BOTH;
-        checkoutPanel.add(Box.createGlue(), con);
-        con.gridx = 6;
-        checkoutPanel.add(Box.createGlue(), con);
+        gbc.gridy = 20;
+        gbc.gridx = 0;
+        gbc.weighty = 1.0;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.BOTH;
+        checkoutPanel.add(Box.createGlue(), gbc);
+        gbc.gridx = 6;
+        checkoutPanel.add(Box.createGlue(), gbc);
 
         checkoutPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
@@ -433,8 +405,6 @@ public class CheckoutFrame extends JFrame implements ActionListener{
 
         checkoutAndCart.setRightComponent(cartPanel);
 
-        //DatabaseQueries.lookForaUser(username);
-
         c.add(checkoutAndCart);
         this.pack();
         this.setResizable(false);
@@ -459,10 +429,17 @@ public class CheckoutFrame extends JFrame implements ActionListener{
                 case "Cancel Checkout", "Return to Bookstore" -> {
                     this.dispose();
                 }
-                case "Confirm Order" -> System.out.println("ordered"); // checkoutScreen
+                case "Confirm Order" -> checkout();
                 default -> System.out.println("Error");
             }
         }
+    }
+
+    public void checkout(){
+        JOptionPane.showMessageDialog(null, "Order Confirmed!" );
+        Order order = new Order(orderNum+1, new Date(System.currentTimeMillis()), basket.getTotal(),new Date(System.currentTimeMillis()+5000000), Order.Status.PROCESSED );
+        LookInnaBookFrame.userBasket = new Basket();
+        this.dispose();
     }
 
 }

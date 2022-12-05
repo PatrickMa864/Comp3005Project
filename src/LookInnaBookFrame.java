@@ -15,11 +15,10 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
     private ArrayList<User> users;
     private User currentUser;
     private LookInnaBookModel model;
-    private Basket userBasket;
+    public static Basket userBasket;
     private JMenuBar menuBar;
     private JMenu menu;
     private JMenuItem m1, m2;
-
     private JLabel[] amountLabel;
 
     public LookInnaBookFrame(ArrayList<Book> library, ArrayList<User> users){
@@ -154,8 +153,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                 JButton infoButton = new JButton("?");
                 infoButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        JOptionPane infoMessage = new JOptionPane();
-                        JOptionPane.showMessageDialog(null, book.getInfo());
+
                     }
                 });
                 c.fill = 2;
@@ -175,38 +173,22 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             }
 
             JButton viewBasket = new JButton("View Basket");
-            viewBasket.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    JFrame basket = new JFrame("Basket");
-                    JOptionPane.showMessageDialog(basket, "VIEWING BASKET:" + "\n" + userBasket.printBasket() + "\nTOTAL: $" + userBasket.getTotal());
-                }
-            });
+            viewBasket.addActionListener(this);
+
 
             c.fill = 2;
             c.anchor = 17;
             c.gridx = 1;
             sidePanel.add(viewBasket, c);
             JButton checkoutButton = new JButton("Checkout");
-            checkoutButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println("yooo");
-                    new CheckoutFrame(currentUser, userBasket.getTotal(), userBasket);
-
-                }
-            });
+            checkoutButton.addActionListener(this);
             c.fill = 2;
             c.anchor = 18;
             c.gridx = 1;
             sidePanel.add(checkoutButton, c);
 
             JButton searchButton = new JButton("Search");
-            searchButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-//                JOptionPane  = new JOptionPane();
-//                JFrame basket = new JFrame("Basket");
-//                JOptionPane.showMessageDialog(basket, "VIEWING BASKET:"  + "\n" + printBasket(userBasket) + "\nTOTAL: $" + getTotal(userBasket));
-                }
-            });
+            searchButton.addActionListener(this);
             c.anchor = 19;
             c.gridy = 0;
             JTextField searchText = new JTextField();
@@ -243,13 +225,31 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
     public void actionPerformed(ActionEvent e)
     {
         String s = e.getActionCommand();
-        switch(s){
-            case "Search":
-                String searchKey = JOptionPane.showInputDialog(null, "Search for:");
-                model.search(searchKey);
-                break;
-            case "Checkout:":
+        Object o = e.getSource();
 
+        if (o instanceof JButton) {
+            switch (((JButton) o).getText()) {
+                case "Checkout" ->{
+                       new CheckoutFrame(currentUser, userBasket.getTotal(), userBasket, this);
+                }
+                case "View Basket" -> {
+                        JFrame basket = new JFrame("Basket");
+                        JOptionPane.showMessageDialog(basket, "VIEWING BASKET:" + "\n" + userBasket.printBasket() + "\nTOTAL: $" + userBasket.getTotal());
+                }
+                case "Search" -> {
+
+                }
+
+                default -> System.out.println("Error");
+            }
+        }else {
+            switch (s) {
+                case "Search" -> {
+                    String searchKey = JOptionPane.showInputDialog(null, "Search for:");
+                    model.search(searchKey);
+                }
+                case "Checkout" -> new CheckoutFrame(currentUser, userBasket.getTotal(), userBasket, this);
+            }
         }
 
     }
@@ -272,4 +272,6 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
         users.add(user2);
         new LookInnaBookFrame(library, users);
     }
+
+
 }
