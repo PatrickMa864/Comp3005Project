@@ -48,7 +48,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             while(userName!=null) {
                 userName = JOptionPane.showInputDialog(null, "Please enter your Username:");
                 for (User u : users) {
-                    if (u.getUserName().equals(userName)) {
+                    if (u.getUserName().equalsIgnoreCase(userName)) {
                         String password = JOptionPane.showInputDialog(null, "Please enter your password");
                         if (u.getPassword().equals(password)) {
                             currentUser = u;
