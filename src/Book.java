@@ -114,4 +114,9 @@ public class Book {
         "\nAmount in Stock: " + numCopies +
         "\nBook Version: " + version;
     }
+
+    public String getSimpleInfo(){
+        return  title + " by: " + author.getFirstName() + " " + author.getLastName() +
+                "\nISBN: " + ISBN + "\nQuantity: " + numCopies + "\nPrice: " + (numCopies * price);
+    }
 }

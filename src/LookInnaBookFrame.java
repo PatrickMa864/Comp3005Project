@@ -177,15 +177,28 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             JButton viewBasket = new JButton("View Basket");
             viewBasket.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    JOptionPane BasketView = new JOptionPane();
                     JFrame basket = new JFrame("Basket");
                     JOptionPane.showMessageDialog(basket, "VIEWING BASKET:" + "\n" + userBasket.printBasket() + "\nTOTAL: $" + userBasket.getTotal());
                 }
             });
+
             c.fill = 2;
             c.anchor = 17;
             c.gridx = 1;
             sidePanel.add(viewBasket, c);
+            JButton checkoutButton = new JButton("Checkout");
+            checkoutButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("yooo");
+                    new CheckoutFrame(currentUser, userBasket.getTotal(), userBasket);
+
+                }
+            });
+            c.fill = 2;
+            c.anchor = 18;
+            c.gridx = 1;
+            sidePanel.add(checkoutButton, c);
+
             JButton searchButton = new JButton("Search");
             searchButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -252,7 +265,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
         library.add(b1);
         library.add(b2);
         library.add(b3);
-        Address addy1 = new Address(11, 10,"Nine st.", "eight", "Seven", "Six", "five43");
+        Address addy1 = new Address(11, 10, 1000,"Nine st.", "eight", Address.Provinces[4], "Six", "five43");
         User user1 = new User("Pat", "M", "PM", "password", "pm@g.co", addy1);
         User user2 = new User("Pat2", "M2", "PM2", "password2", "pm@g.co", addy1);
         users.add(user1);
