@@ -5,12 +5,15 @@ public class Book {
     private Publisher publisher;
     private double price;
     private int numPages;
-    private Genre genre;
+    public static String[] Genres = {"FICTION", "NONFICTION", "SCIFI", "FANTASY", "MYSTERY", "ROMANCE", "THRILLER",
+            "HISTORY", "HORROR", "ADVENTURE", "GRAPHIC", "MANGA", "POETRY", "COOKBOOK", "CHILDREN", "GUIDEBOOK",
+            "RESEARCH", "BIOGRAPHIC", "INFORMATIONAL"};
+    private String genre;
     private int numCopies;
     private int version;
     private double publisherRoyalty;
 
-    public Book(String title, Author author, int ISBN, Publisher publisher, double price, int numPages, Genre genre, int numCopies, int version, double publisherRoyalty) {
+    public Book(String title, Author author, int ISBN, Publisher publisher, double price, int numPages, String genre, int numCopies, int version, double publisherRoyalty) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -71,11 +74,11 @@ public class Book {
         this.numPages = numPages;
     }
 
-    public Genre getGenre() {
+    public String getGenre() {
         return genre;
     }
 
-    public void setGenre(Genre genre) {
+    public void setGenre(String genre) {
         this.genre = genre;
     }
 
