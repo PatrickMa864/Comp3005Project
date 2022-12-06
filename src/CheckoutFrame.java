@@ -437,7 +437,9 @@ public class CheckoutFrame extends JFrame implements ActionListener{
 
     public void checkout(){
         JOptionPane.showMessageDialog(null, "Order Confirmed!" );
-        Order order = new Order(orderNum+1, new Date(System.currentTimeMillis()), basket.getTotal(),new Date(System.currentTimeMillis()+5000000), Order.Status.PROCESSED );
+        orderNum+=1;
+        System.out.println(orderNum);
+        Order order = new Order(orderNum++, new Date(System.currentTimeMillis()), basket.getTotal(),new Date(System.currentTimeMillis()+5000000), Order.Status.PROCESSED );
         LookInnaBookFrame.userBasket = new Basket();
         this.dispose();
     }

@@ -121,7 +121,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                                 b2.setNumCopies(b2.getNumCopies() + 1);
 
                             } else {
-                                userBasket.getBooks().add(new Book(b.getTitle(), b.getAuthor(), b.getISBN(), b.getPublisher(), b.getPrice(), b.getNumPages(), b.getGenre(), 1, b.getVersion(), b.getPublisherRoyalty()));
+                                userBasket.getBooks().add(new Book(b.getTitle(), b.getAuthor(), b.getISBN(), b.getPublisher(), b.getPrice(), b.getNumPages(), b.getGenre(), 1, b.getVersion(), b.getPublisherRoyalty(), b.getPublishedYear()));
                             }
 
                         } else {
@@ -257,11 +257,12 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
     public static void main(String[] args) {
         ArrayList<Book> library = new ArrayList<>();
         ArrayList<User> users = new ArrayList<>();
-        Author a1 = new Author(1,"Charles", "Dickens", "cd@g.co");
-        Publisher p1 = new Publisher("a","b", "c", "d");
-        Book b1 = new Book("the book", a1, 1, p1, 3.00, 100, Book.Genres[1],4,1,1.00 );
-        Book b2 = new Book("the book2", a1, 2, p1, 3.00, 100, Book.Genres[2], 3,2,1.00 );
-        Book b3 = new Book("the book3", a1, 3, p1, 3.00, 100, Book.Genres[3], 2,3,1.00 );
+        Author a1 = new Author("Charles", "Dickens");
+        Address addy0 = new Address(11, 10, 1000,"Nine st.", "eight", Address.Provinces[4], "Six", "five43");
+        Publisher p1 = new Publisher("a","b", "c", "d", addy0 );
+        Book b1 = new Book("the book", a1, 1, p1, 3.00, 100, Book.Genres[1],4,1,1.00, 2000 );
+        Book b2 = new Book("the book2", a1, 2, p1, 3.00, 100, Book.Genres[2], 3,2,1.00 ,2005);
+        Book b3 = new Book("the book3", a1, 3, p1, 3.00, 100, Book.Genres[3], 2,3,1.00 , 2010);
         library.add(b1);
         library.add(b2);
         library.add(b3);

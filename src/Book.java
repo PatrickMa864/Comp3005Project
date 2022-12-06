@@ -13,7 +13,9 @@ public class Book {
     private int version;
     private double publisherRoyalty;
 
-    public Book(String title, Author author, int ISBN, Publisher publisher, double price, int numPages, String genre, int numCopies, int version, double publisherRoyalty) {
+    private int publishedYear;
+
+    public Book(String title, Author author, int ISBN, Publisher publisher, double price, int numPages, String genre, int numCopies, int version, double publisherRoyalty, int publishedYear) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -24,6 +26,7 @@ public class Book {
         this.numCopies = numCopies;
         this.version = version;
         this.publisherRoyalty = publisherRoyalty;
+        this.publishedYear = publishedYear;
     }
 
     public String getTitle() {
@@ -104,6 +107,14 @@ public class Book {
 
     public void setPublisherRoyalty(double publisherRoyalty) {
         this.publisherRoyalty = publisherRoyalty;
+    }
+
+    public int getPublishedYear() {
+        return publishedYear;
+    }
+
+    public void setPublishedYear(int publishedYear) {
+        this.publishedYear = publishedYear;
     }
 
     public String getInfo(){

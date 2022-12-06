@@ -4,11 +4,14 @@ public class Publisher {
     private String email;
     private String bankAccount;
 
-    public Publisher(String name, String phone, String email, String bankAccount) {
+    private Address address;
+
+    public Publisher(String name, String phone, String email, String bankAccount, Address address) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.bankAccount = bankAccount;
+        this.address = address;
     }
 
     public String getName() {
