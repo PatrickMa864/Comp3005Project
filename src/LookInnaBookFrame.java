@@ -16,6 +16,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
     private User currentUser;
     private LookInnaBookModel model;
     public static Basket userBasket;
+    public static Basket searchBasket;
     private JMenuBar menuBar;
     private JMenu menu;
     private JMenuItem m1, m2;
@@ -237,7 +238,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                         JOptionPane.showMessageDialog(basket, "VIEWING BASKET:" + "\n" + userBasket.printBasket() + "\nTOTAL: $" + userBasket.getTotal());
                 }
                 case "Search" -> {
-
+                    new SearchFrame(currentUser, userBasket, library);
                 }
 
                 default -> System.out.println("Error");
@@ -245,8 +246,8 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
         }else {
             switch (s) {
                 case "Search" -> {
-                    String searchKey = JOptionPane.showInputDialog(null, "Search for:");
-                    model.search(searchKey);
+                    new SearchFrame(currentUser, userBasket, library);
+                    //model.search();
                 }
                 case "Checkout" -> new CheckoutFrame(currentUser, userBasket.getTotal(), userBasket, this);
             }

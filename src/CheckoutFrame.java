@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 import static java.lang.String.valueOf;
 
@@ -438,7 +439,7 @@ public class CheckoutFrame extends JFrame implements ActionListener{
     public void checkout(){
         JOptionPane.showMessageDialog(null, "Order Confirmed!" );
         orderNum+=1;
-        System.out.println(orderNum);
+        System.out.println(shippingStreetNumTF.getText() + shippingStreetNameTF.getText() + shippingApartmentTF.getText() + shippingCityTF.getText() + Objects.requireNonNull(shippingProvinceCB.getSelectedItem()).toString() + shippingCountryTF.getText() + shippingPostalCodeTF.getText());
         Order order = new Order(orderNum++, new Date(System.currentTimeMillis()), basket.getTotal(),new Date(System.currentTimeMillis()+5000000), Order.Status.PROCESSED );
         LookInnaBookFrame.userBasket = new Basket();
         this.dispose();

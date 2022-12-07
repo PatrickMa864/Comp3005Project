@@ -1,28 +1,11 @@
 import java.util.ArrayList;
 
 public class Basket {
-    private int basket_id;
-    private ArrayList<Book> books;
-    private double subTotal;
 
-    public Basket(int basket_id, ArrayList<Book> books, double subTotal) {
-        this.basket_id = basket_id;
-        this.books = books;
-        this.subTotal = subTotal;
-    }
+    private ArrayList<Book> books;
 
     public Basket(){
-        basket_id = 0;
         books = new ArrayList<Book>();
-        subTotal = 0;
-    }
-
-    public int getBasket_id() {
-        return basket_id;
-    }
-
-    public void setBasket_id(int basket_id) {
-        this.basket_id = basket_id;
     }
 
     public ArrayList<Book> getBooks() {
@@ -31,14 +14,6 @@ public class Basket {
 
     public void setBooks(ArrayList<Book> books) {
         this.books = books;
-    }
-
-    public double getSubTotal() {
-        return subTotal;
-    }
-
-    public void setSubTotal(double subTotal) {
-        this.subTotal = subTotal;
     }
 
     public String printBasket(){
@@ -64,6 +39,10 @@ public class Basket {
                 this.getBooks().remove(i);
             }
         }
+    }
+
+    public void addBook(Book book){
+        books.add(book);
     }
 
     public boolean hasBook(String title){

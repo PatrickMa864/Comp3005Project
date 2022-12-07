@@ -5,7 +5,7 @@ public class Book {
     private Publisher publisher;
     private double price;
     private int numPages;
-    public static String[] Genres = {"FICTION", "NONFICTION", "SCIFI", "FANTASY", "MYSTERY", "ROMANCE", "THRILLER",
+    public static String[] Genres = {"-", "FICTION", "NONFICTION", "SCIFI", "FANTASY", "MYSTERY", "ROMANCE", "THRILLER",
             "HISTORY", "HORROR", "ADVENTURE", "GRAPHIC", "MANGA", "POETRY", "COOKBOOK", "CHILDREN", "GUIDEBOOK",
             "RESEARCH", "BIOGRAPHIC", "INFORMATIONAL"};
     private String genre;
