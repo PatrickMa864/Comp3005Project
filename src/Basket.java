@@ -8,6 +8,13 @@ public class Basket {
         books = new ArrayList<Book>();
     }
 
+    public Basket(ArrayList<Book> books){
+        this.books = new ArrayList<Book>();
+        for (Book b: books){
+            this.books.add(b);
+        }
+    }
+
     public ArrayList<Book> getBooks() {
         return books;
     }

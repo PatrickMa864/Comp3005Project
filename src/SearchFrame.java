@@ -18,13 +18,10 @@ public class SearchFrame extends JFrame implements ActionListener {
     genreList = new JComboBox<>(Book.Genres);
     private final JTextField errorLabel = new JTextField("");
 
-    private final User user;
-    private Basket basket;
-    private ArrayList<Book> library;
 
-    public SearchFrame(User user, Basket basket, ArrayList<Book> library){
-        this.user = user;
-        this.basket = basket;
+    private Basket library;
+
+    public SearchFrame(Basket library){
         this.library = library;
         JPanel searchPanel = new JPanel();
         JLabel searchLabel = new JLabel("Search by Title/Author/ISBN: ");
@@ -53,7 +50,7 @@ public class SearchFrame extends JFrame implements ActionListener {
         search.addActionListener(this);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        Dimension spacer = new Dimension(25, 25);
+
         gbc.gridy = 0;
         gbc.gridx = 2;
         gbc.gridwidth = 8;
@@ -130,7 +127,7 @@ public class SearchFrame extends JFrame implements ActionListener {
         if(!genre.equals("-")){
             careAboutGenre = true;
         }
-        for(Book b : library){
+        for(Book b : library.getBooks()){
             if (careAboutGenre){
                 if (b.getGenre().equalsIgnoreCase(genre)) {
                     if (b.getTitle().toUpperCase().contains(searchWord.toUpperCase())) {
@@ -152,6 +149,7 @@ public class SearchFrame extends JFrame implements ActionListener {
             }
         }
         System.out.println(LookInnaBookFrame.searchBasket.printBasket());
+        new LookInnaBookFrame(LookInnaBookFrame.searchBasket, LookInnaBookFrame.users, true);
         this.dispose();
 
     }

@@ -14,6 +14,14 @@ public class User {
         this.email = email;
         this.address = address;
     }
+    public User(){
+        this.firstName = "";
+        this.lastName = "";
+        this.userName = "";
+        this.password = "";
+        this.email = "";
+        this.address = null;
+    }
 
     public String getFirstName() {
         return firstName;

@@ -11,23 +11,28 @@ import java.util.Iterator;
 import static java.lang.String.valueOf;
 
 public class LookInnaBookFrame extends JFrame implements LookInnaBookView, ActionListener {
-    private ArrayList<Book> library;
-    private ArrayList<User> users;
+    private Basket library;
+    static ArrayList<User> users;
     private User currentUser;
     private LookInnaBookModel model;
     public static Basket userBasket;
     public static Basket searchBasket;
+    private Basket displayBasket;
+    private boolean loggedIn;
     private JMenuBar menuBar;
     private JMenu menu;
     private JMenuItem m1, m2;
     private JLabel[] amountLabel;
 
-    public LookInnaBookFrame(ArrayList<Book> library, ArrayList<User> users){
+
+    public LookInnaBookFrame(Basket library, ArrayList<User> users, boolean loggedIn){
         super("LookInnaBook");
         this.library = library;
         this.users = users;
+        this.loggedIn = loggedIn;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userBasket = new Basket();
+
 
         menuBar = new JMenuBar();
         menu = new JMenu("Menu");
@@ -39,38 +44,42 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
         menu.add(m2);
         menuBar.add(menu);
         this.setJMenuBar(menuBar);
-
-        String[] options = {"User", "Manager"};
-        int loginOption = JOptionPane.showOptionDialog(null, "Login as User or Manager?",
-                "Select an Option",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,null, options, options[1]);
-        if (loginOption==0){
-            String userName = "";
-            usernamefield:
-            while(userName!=null) {
-                userName = JOptionPane.showInputDialog(null, "Please enter your Username:");
-                for (User u : users) {
-                    if (u.getUserName().equalsIgnoreCase(userName)) {
-                        String password = JOptionPane.showInputDialog(null, "Please enter your password");
-                        if (u.getPassword().equals(password)) {
-                            currentUser = u;
-                            System.out.println("welcome");
-                            break usernamefield;
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Password Failed");
-                            currentUser = null;
-                            break;
+        if (!loggedIn) {
+            String[] options = {"User", "Manager"};
+            int loginOption = JOptionPane.showOptionDialog(null, "Login as User or Manager?",
+                    "Select an Option", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+            if (loginOption == 0) {
+                String userName = "";
+                usernamefield:
+                while (userName != null) {
+                    userName = JOptionPane.showInputDialog(null, "Please enter your Username:");
+                    for (User u : users) {
+                        if (u.getUserName().equalsIgnoreCase(userName)) {
+                            String password = JOptionPane.showInputDialog(null, "Please enter your password");
+                            if (u.getPassword().equals(password)) {
+                                currentUser = u;
+                                System.out.println("welcome");
+                                break usernamefield;
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Password Failed");
+                                currentUser = null;
+                                break;
+                            }
                         }
                     }
-                }
-                if(userName!=null) {
-                    JOptionPane.showMessageDialog(null, "Username does not exist");
+                    if (userName != null) {
+                        JOptionPane.showMessageDialog(null, "Username does not exist");
+                    }
                 }
             }
+        } else {
+            currentUser = new User();
+
         }
 
         if(currentUser!=null) {
-
-            model = new LookInnaBookModel(library);
+            displayBasket = this.library;
+            model = new LookInnaBookModel(displayBasket);
 
             model.addLookInnaBookView(this);
 
@@ -86,13 +95,13 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             JPanel bodyPanel = new JPanel();
             JScrollPane bodyScroll = new JScrollPane(bodyPanel, 21, 32);
             JPanel sidePanel = new JPanel(new GridBagLayout());
-            int numBooks = library.size();
+            int numBooks = displayBasket.getBooks().size();
             JPanel[] bookPanels = new JPanel[numBooks];
             int counter = 0;
 
             amountLabel = new JLabel[numBooks];
             JLabel headerLabel;
-            for (Iterator var12 = library.iterator(); var12.hasNext(); ++counter) {
+            for (Iterator var12 = displayBasket.getBooks().iterator(); var12.hasNext(); ++counter) {
                 final Book book = (Book) var12.next();
                 JPanel bookPanel = new JPanel(new GridLayout());
                 JPanel bookPanel2 = new JPanel(new GridBagLayout());
@@ -186,15 +195,18 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             c.fill = 2;
             c.anchor = 18;
             c.gridx = 1;
-            sidePanel.add(checkoutButton, c);
 
             JButton searchButton = new JButton("Search");
+
+            if(loggedIn) {
+                searchButton.setText("Back");
+            } else{
+                sidePanel.add(checkoutButton, c);
+            }
             searchButton.addActionListener(this);
             c.anchor = 19;
             c.gridy = 0;
-            JTextField searchText = new JTextField();
-            sidePanel.add(searchText, c);
-            c.gridx = 2;
+            c.gridx = 1;
             sidePanel.add(searchButton, c);
 
 
@@ -212,14 +224,10 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
     }
 
 
-
-
-
-
     public void update(LookInnaBookEvent event) {
         library = event.getLibrary();
-        for(int i = 0; i<library.size(); i++){
-            amountLabel[i].setText("Stock: " + valueOf(library.get(i).getNumCopies()));
+        for(int i = 0; i<library.getBooks().size(); i++){
+            amountLabel[i].setText("Stock: " + valueOf(library.getBooks().get(i).getNumCopies()));
         }
     }
 
@@ -238,7 +246,10 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                         JOptionPane.showMessageDialog(basket, "VIEWING BASKET:" + "\n" + userBasket.printBasket() + "\nTOTAL: $" + userBasket.getTotal());
                 }
                 case "Search" -> {
-                    new SearchFrame(currentUser, userBasket, library);
+                    new SearchFrame(library);
+                }
+                case "Back" -> {
+                    this.dispose();
                 }
 
                 default -> System.out.println("Error");
@@ -246,12 +257,13 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
         }else {
             switch (s) {
                 case "Search" -> {
-                    new SearchFrame(currentUser, userBasket, library);
-                    //model.search();
+                    new SearchFrame(library);
+                    this.setVisible(false);
                 }
                 case "Checkout" -> new CheckoutFrame(currentUser, userBasket.getTotal(), userBasket, this);
             }
         }
+        model.updateViews();
 
     }
 
@@ -272,7 +284,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
         User user2 = new User("Pat2", "M2", "PM2", "password2", "pm@g.co", addy1);
         users.add(user1);
         users.add(user2);
-        new LookInnaBookFrame(library, users);
+        new LookInnaBookFrame(new Basket(library), users,false);
     }
 
 
