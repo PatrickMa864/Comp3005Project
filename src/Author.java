@@ -9,6 +9,12 @@ public class Author {
         this.lastName = lastName;
     }
 
+    public Author(String fullName) {
+        String[] splited = fullName.split(" ");
+        this.firstName = splited[0];
+        this.lastName = splited[1];
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -23,6 +29,10 @@ public class Author {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFullName(){
+        return firstName+" "+lastName;
     }
 
 }

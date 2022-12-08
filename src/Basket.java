@@ -31,7 +31,7 @@ public class Basket {
         return output;
     }
 
-    public Book getBook(int ISBN){
+    public Book getBook(long ISBN){
         for(Book b: this.getBooks()){
             if (b.getISBN() == ISBN){
                 return b;
@@ -40,7 +40,7 @@ public class Basket {
         return null;
     }
 
-    public void removeBook(int ISBN){
+    public void removeBook(long ISBN){
         for(int i = 0; i<this.getBooks().size();i++){
             if (this.getBooks().get(i).getISBN() == ISBN){
                 this.getBooks().remove(i);

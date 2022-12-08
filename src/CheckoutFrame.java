@@ -1,10 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.nimbus.State;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
@@ -132,7 +130,7 @@ public class CheckoutFrame extends JFrame implements ActionListener{
 
         if (!sameAddress) {
             billingStreetNumTF.setText(valueOf(address.getStreetNum()));
-            billingStreetNameTF.setText(address.getStreet());
+            billingStreetNameTF.setText(address.getStreetName());
             billingApartmentTF.setText(valueOf(address.getApartmentNo()));
             billingCityTF.setText(address.getCity());
             billingProvinceCB.setSelectedItem(address.getProvince());
@@ -140,7 +138,7 @@ public class CheckoutFrame extends JFrame implements ActionListener{
             billingPostalCodeTF.setText(address.getPostalCode());
         }
         shippingStreetNumTF.setText(valueOf(address.getStreetNum()));
-        shippingStreetNameTF.setText(address.getStreet());
+        shippingStreetNameTF.setText(address.getStreetName());
         shippingApartmentTF.setText(valueOf(address.getApartmentNo()));
         shippingCityTF.setText(address.getCity());
         shippingProvinceCB.setSelectedItem(address.getProvince());
@@ -440,7 +438,7 @@ public class CheckoutFrame extends JFrame implements ActionListener{
         JOptionPane.showMessageDialog(null, "Order Confirmed!" );
         orderNum+=1;
         System.out.println(shippingStreetNumTF.getText() + shippingStreetNameTF.getText() + shippingApartmentTF.getText() + shippingCityTF.getText() + Objects.requireNonNull(shippingProvinceCB.getSelectedItem()).toString() + shippingCountryTF.getText() + shippingPostalCodeTF.getText());
-        Order order = new Order(orderNum++, new Date(System.currentTimeMillis()), basket.getTotal(),new Date(System.currentTimeMillis()+5000000), Order.Status.PROCESSED );
+        Order order = new Order(orderNum++, new Date(System.currentTimeMillis()), basket.getTotal(),new Date(System.currentTimeMillis()+5000000), Order.Status.PROCESSED, user );
         LookInnaBookFrame.userBasket = new Basket();
         this.dispose();
     }

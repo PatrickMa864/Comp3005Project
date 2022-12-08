@@ -1,19 +1,19 @@
 public class Address {
     private int address_id;
     private int apartmentNo;
+    private String streetName;
     private int streetNum;
-    private String street;
     private String city;
     public static String[] Provinces = {"--", "AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"};
     private String province;
     private String country;
     private String postalCode;
 
-    public Address(int address_id, int apartmentNo, int streetNum, String street, String city, String province, String country, String postalCode) {
+    public Address(int address_id, int apartmentNo, String streetName, int streetNum, String city, String province, String country, String postalCode) {
         this.address_id = address_id;
         this.apartmentNo = apartmentNo;
+        this.streetName = streetName;
         this.streetNum = streetNum;
-        this.street = street;
         this.city = city;
         this.province = province;
         this.country = country;
@@ -44,12 +44,12 @@ public class Address {
         this.streetNum = streetNum;
     }
 
-    public String getStreet() {
-        return street;
+    public String getStreetName() {
+        return streetName;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
     }
 
     public String getCity() {

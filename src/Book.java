@@ -1,7 +1,7 @@
 public class Book {
     private String title;
     private Author author;
-    private int ISBN;
+    private long ISBN;
     private Publisher publisher;
     private double price;
     private int numPages;
@@ -15,7 +15,7 @@ public class Book {
 
     private int publishedYear;
 
-    public Book(String title, Author author, int ISBN, Publisher publisher, double price, int numPages, String genre, int numCopies, int version, double publisherRoyalty, int publishedYear) {
+    public Book(String title, Author author, long ISBN, Publisher publisher, double price, int numPages, String genre, int numCopies, int version, double publisherRoyalty, int publishedYear) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -45,11 +45,11 @@ public class Book {
         this.author = author;
     }
 
-    public int getISBN() {
+    public long getISBN() {
         return ISBN;
     }
 
-    public void setISBN(int ISBN) {
+    public void setISBN(long ISBN) {
         this.ISBN = ISBN;
     }
 

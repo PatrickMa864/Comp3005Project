@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -49,26 +51,43 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             int loginOption = JOptionPane.showOptionDialog(null, "Login as User or Manager?",
                     "Select an Option", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
             if (loginOption == 0) {
-                String userName = "";
-                usernamefield:
-                while (userName != null) {
-                    userName = JOptionPane.showInputDialog(null, "Please enter your Username:");
-                    for (User u : users) {
-                        if (u.getUserName().equalsIgnoreCase(userName)) {
-                            String password = JOptionPane.showInputDialog(null, "Please enter your password");
-                            if (u.getPassword().equals(password)) {
-                                currentUser = u;
-                                System.out.println("welcome");
-                                break usernamefield;
-                            } else {
-                                JOptionPane.showMessageDialog(null, "Password Failed");
-                                currentUser = null;
+                String[] options2 = {"Login", "Register"};
+                int loginOption2 = JOptionPane.showOptionDialog(null, "Login or Register as new User?",
+                        "Select an Option", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options2, options2[1]);
+                if (loginOption2 == 0) {
+                    String userName = "";
+                    usernamefield:
+                    while (userName != null) {
+                        userName = JOptionPane.showInputDialog(null, "Please enter your Username:");
+                        for (User u : users) {
+                            if (u.getUserName().equalsIgnoreCase(userName)) {
+                                String password = JOptionPane.showInputDialog(null, "Please enter your password");
+                                if (u.getPassword().equals(password)) {
+                                    currentUser = u;
+                                    System.out.println("welcome");
+                                    break usernamefield;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Password Failed");
+                                    currentUser = null;
+                                    break;
+                                }
+                            }
+                        }
+                        if (userName != null) {
+                            JOptionPane.showMessageDialog(null, "Username does not exist");
+                        }
+                    }
+                } else {
+                    String userName = "";
+                    usernamefield:
+                    while (userName != null) {
+                        String newUsername = JOptionPane.showInputDialog(null, "Please enter a Username:");
+                        for (User u : users) {
+                            if (u.getUserName().equals(newUsername)) {
+                                JOptionPane.showMessageDialog(null, "Username alreadt exist");
                                 break;
                             }
                         }
-                    }
-                    if (userName != null) {
-                        JOptionPane.showMessageDialog(null, "Username does not exist");
                     }
                 }
             }
@@ -133,6 +152,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                             } else {
                                 userBasket.getBooks().add(new Book(b.getTitle(), b.getAuthor(), b.getISBN(), b.getPublisher(), b.getPrice(), b.getNumPages(), b.getGenre(), 1, b.getVersion(), b.getPublisherRoyalty(), b.getPublishedYear()));
                             }
+                            DataBaseQueries.addBookToBasket(currentUser, book);
 
                         } else {
                             JOptionPane.showMessageDialog(null, "Book out of stock");
@@ -163,7 +183,8 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                 JButton infoButton = new JButton("?");
                 infoButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-
+                        JOptionPane infoMessage = new JOptionPane();
+                        JOptionPane.showMessageDialog(null, book.getInfo());
                     }
                 });
                 c.fill = 2;
@@ -271,7 +292,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
         ArrayList<Book> library = new ArrayList<>();
         ArrayList<User> users = new ArrayList<>();
         Author a1 = new Author("Charles", "Dickens");
-        Address addy0 = new Address(11, 10, 1000,"Nine st.", "eight", Address.Provinces[4], "Six", "five43");
+        Address addy0 = new Address(11, 10, "Nine st.",1000, "eight", Address.Provinces[4], "Six", "five43");
         Publisher p1 = new Publisher("a","b", "c", "d", addy0 );
         Book b1 = new Book("the book", a1, 1, p1, 3.00, 100, Book.Genres[1],4,1,1.00, 2000 );
         Book b2 = new Book("the book2", a1, 2, p1, 3.00, 100, Book.Genres[2], 3,2,1.00 ,2005);
@@ -279,12 +300,14 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
         library.add(b1);
         library.add(b2);
         library.add(b3);
-        Address addy1 = new Address(11, 10, 1000,"Nine st.", "eight", Address.Provinces[4], "Six", "five43");
-        User user1 = new User("Pat", "M", "PM", "password", "pm@g.co", addy1);
-        User user2 = new User("Pat2", "M2", "PM2", "password2", "pm@g.co", addy1);
+        Address addy1 = new Address(11, 10, "Nine st.",1000, "eight", Address.Provinces[4], "Six", "five43");
+        User user1 = new User("PM", "password", "Pat", "M", "pm@g.co", addy1);
+        User user2 = new User("PM2", "password2","Pat2", "M2",  "pm@g.co", addy1);
         users.add(user1);
         users.add(user2);
-        new LookInnaBookFrame(new Basket(library), users,false);
+
+
+        new LookInnaBookFrame(new Basket(library), DataBaseQueries.makeUserList(),false);
     }
 
 

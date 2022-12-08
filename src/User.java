@@ -1,24 +1,24 @@
 public class User {
-    private String firstName;
-    private String lastName;
     private String userName;
     private String password;
+    private String firstName;
+    private String lastName;
     private String email;
     private Address address;
 
-    public User(String firstName, String lastName, String userName, String password, String email, Address address) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String userName, String password, String firstName, String lastName, String email, Address address) {
         this.userName = userName;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.address = address;
     }
     public User(){
-        this.firstName = "";
-        this.lastName = "";
         this.userName = "";
         this.password = "";
+        this.firstName = "";
+        this.lastName = "";
         this.email = "";
         this.address = null;
     }
