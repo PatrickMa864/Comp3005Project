@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3e337018-7441-496e-9228-66c44eca41a0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataBaseQueries.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBaseQueries.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LookInnaBookFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LookInnaBookFrame.java" afterDir="false" />
+    <list default="true" id="3e337018-7441-496e-9228-66c44eca41a0" name="Default Changelist" comment="add and remove work with addtobasket">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/DataBaseQueries.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/DataBaseQueries.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/LookInnaBookFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/LookInnaBookFrame.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +42,25 @@
       <option name="presentableId" value="Default" />
       <updated>1670564461497</updated>
     </task>
+    <task id="LOCAL-00001" summary="add and remove work with addtobasket">
+      <created>1670566894411</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1670566894411</updated>
+    </task>
+    <task id="LOCAL-00002" summary="add and remove work with addtobasket">
+      <created>1670566966998</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1670566966998</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add and remove work with addtobasket" />
+    <option name="LAST_COMMIT_MESSAGE" value="add and remove work with addtobasket" />
   </component>
 </project>
