@@ -1,127 +1,119 @@
+import java.util.Date;
+
 public class Book {
-    private String title;
-    private Author author;
     private long ISBN;
-    private Publisher publisher;
+    private String name;
+    private String genre;
+    private int numCopies;
     private double price;
     private int numPages;
+    private int version;
+    private double publisherRoyalty;
+    private String publisherName;
+
+    private Date publishedYear;
+
     public static String[] Genres = {"-", "FICTION", "NONFICTION", "SCIFI", "FANTASY", "MYSTERY", "ROMANCE", "THRILLER",
             "HISTORY", "HORROR", "ADVENTURE", "GRAPHIC", "MANGA", "POETRY", "COOKBOOK", "CHILDREN", "GUIDEBOOK",
             "RESEARCH", "BIOGRAPHIC", "INFORMATIONAL"};
-    private String genre;
-    private int numCopies;
-    private int version;
-    private double publisherRoyalty;
 
-    private int publishedYear;
-
-    public Book(String title, Author author, long ISBN, Publisher publisher, double price, int numPages, String genre, int numCopies, int version, double publisherRoyalty, int publishedYear) {
-        this.title = title;
-        this.author = author;
+    public Book(long ISBN, String name, String genre, int numCopies, double price, int numPages, int version, double publisherRoyalty, Date publishedYear, String publisherName) {
         this.ISBN = ISBN;
-        this.publisher = publisher;
-        this.price = price;
-        this.numPages = numPages;
+        this.name = name;
         this.genre = genre;
         this.numCopies = numCopies;
+        this.price = price;
+        this.numPages = numPages;
         this.version = version;
         this.publisherRoyalty = publisherRoyalty;
+        this.publisherName = publisherName;
         this.publishedYear = publishedYear;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
     }
 
     public long getISBN() {
         return ISBN;
     }
 
-    public void setISBN(long ISBN) {
-        this.ISBN = ISBN;
-    }
-
-    public Publisher getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(Publisher publisher) {
-        this.publisher = publisher;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getNumPages() {
-        return numPages;
-    }
-
-    public void setNumPages(int numPages) {
-        this.numPages = numPages;
+    public String getName() {
+        return name;
     }
 
     public String getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
     public int getNumCopies() {
         return numCopies;
     }
 
-    public void setNumCopies(int numCopies) {
-        this.numCopies = numCopies;
+    public double getPrice() {
+        return price;
+    }
+
+    public int getNumPages() {
+        return numPages;
     }
 
     public int getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
-        this.version = version;
-    }
-
     public double getPublisherRoyalty() {
         return publisherRoyalty;
+    }
+
+    public String getPublisherName() {
+        return publisherName;
+    }
+
+    public Date getPublishedYear() {
+        return publishedYear;
+    }
+
+    public void setISBN(long ISBN) {
+        this.ISBN = ISBN;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public void setNumCopies(int numCopies) {
+        this.numCopies = numCopies;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setNumPages(int numPages) {
+        this.numPages = numPages;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public void setPublisherRoyalty(double publisherRoyalty) {
         this.publisherRoyalty = publisherRoyalty;
     }
 
-    public int getPublishedYear() {
-        return publishedYear;
+    public void setPublisherName(String publisherName) {
+        this.publisherName = publisherName;
     }
 
-    public void setPublishedYear(int publishedYear) {
+    public void setPublishedYear(Date publishedYear) {
         this.publishedYear = publishedYear;
     }
 
     public String getInfo(){
-        return "Title: " + title +
-        "\nAuthor: " + author.getFirstName() + " " + author.getLastName() +
+        return "Title: " + name +
         "\nISBN: " + ISBN +
-        "\nPublisher: " + publisher.getName() +
+        "\nPublisher name: " + publisherName +
         "\nPrice: " + price +
         "\nNo. Pages: " + numPages +
         "\nGenre: " + genre +
@@ -129,8 +121,9 @@ public class Book {
         "\nBook Version: " + version;
     }
 
+
     public String getSimpleInfo(){
-        return  title + " by: " + author.getFirstName() + " " + author.getLastName() +
+        return  name + " by: " + DataBaseQueries.getAuthorByISBN(this.getISBN()).getFullName() +
                 "\nISBN: " + ISBN + "\nQuantity: " + numCopies + "\nPrice: " + (numCopies * price);
     }
 }

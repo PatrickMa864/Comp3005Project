@@ -23,10 +23,12 @@ public class Basket {
         this.books = books;
     }
 
+
+
     public String printBasket(){
         String output = "";
         for ( Book b: this.getBooks()){
-            output += "\""+b.getTitle() +"\" by "+ b.getAuthor().getFirstName()+ " " + b.getAuthor().getLastName()+ "   Quantity:" + b.getNumCopies()+ "\n";
+            output += "\""+b.getName() +"\" by "+ DataBaseQueries.getAuthorByISBN(b.getISBN()).getFullName() + "   Quantity:" + b.getNumCopies()+ "\n";
         }
         return output;
     }
@@ -54,7 +56,7 @@ public class Basket {
 
     public boolean hasBook(String title){
         for(Book b: this.getBooks()){
-            if (b.getTitle().equals(title)){
+            if (b.getName().equals(title)){
                 return true;
             }
         }return false;

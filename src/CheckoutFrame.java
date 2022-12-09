@@ -29,6 +29,8 @@ public class CheckoutFrame extends JFrame implements ActionListener{
             creditCardExpTF = new JTextField(5),
             creditCardCVVTF = new JTextField(5);
 
+    private boolean sameAddress = false;
+
 
     final JComboBox<String> shippingProvinceCB = new JComboBox<>(Address.Provinces),
             billingProvinceCB = new JComboBox<>(Address.Provinces);
@@ -73,7 +75,7 @@ public class CheckoutFrame extends JFrame implements ActionListener{
         this.totalCost = totalCost;
         this.basket = basket;
         this.lookInnaBookFrame = lookInnaBookFrame;
-        Address address = user.getAddress();
+        Address address = DataBaseQueries.getAddress(user.getAddress());
         //ArrayList<Object> userInfo = DatabaseQueries.lookForaUser(username);
         Container c = this.getContentPane();
         // Clear GUI in order to reload
@@ -111,7 +113,7 @@ public class CheckoutFrame extends JFrame implements ActionListener{
                 billingPostalCodeLabel = new JLabel("Postal Code: ", JLabel.RIGHT);
 
 
-        boolean sameAddress = true;
+        sameAddress = true;
 
         cancelOrder.addActionListener(this);
         submitOrder.addActionListener(this);
@@ -438,7 +440,23 @@ public class CheckoutFrame extends JFrame implements ActionListener{
         JOptionPane.showMessageDialog(null, "Order Confirmed!" );
         orderNum+=1;
         System.out.println(shippingStreetNumTF.getText() + shippingStreetNameTF.getText() + shippingApartmentTF.getText() + shippingCityTF.getText() + Objects.requireNonNull(shippingProvinceCB.getSelectedItem()).toString() + shippingCountryTF.getText() + shippingPostalCodeTF.getText());
-        Order order = new Order(orderNum++, new Date(System.currentTimeMillis()), basket.getTotal(),new Date(System.currentTimeMillis()+5000000), Order.Status.PROCESSED, user );
+        DataBaseQueries.noOfAddressID += 1;
+        Address shippingAddress = new Address(DataBaseQueries.noOfAddressID, Integer.parseInt(shippingApartmentTF.getText()), shippingStreetNameTF.getText(), Integer.parseInt(shippingStreetNumTF.getText()),
+               shippingCityTF.getText(), Objects.requireNonNull(shippingProvinceCB.getSelectedItem()).toString(), shippingCountryTF.getText(), shippingPostalCodeTF.getText());
+        DataBaseQueries.addNewAddress(shippingAddress);
+        Address billingAddress;
+        if(billingSameAsShipping.isSelected()){
+            billingAddress = shippingAddress;
+        }
+        else {
+            DataBaseQueries.noOfAddressID += 1;
+            billingAddress = new Address(DataBaseQueries.noOfAddressID, Integer.parseInt(billingApartmentTF.getText()), billingStreetNameTF.getText(), Integer.parseInt(billingStreetNumTF.getText()),
+                    billingCityTF.getText(), Objects.requireNonNull(billingProvinceCB.getSelectedItem()).toString(), billingCountryTF.getText(), billingPostalCodeTF.getText());
+            DataBaseQueries.addNewAddress(billingAddress);
+        }
+        DataBaseQueries.noOfOrderID += 1;
+        Order order = new Order(DataBaseQueries.noOfOrderID, new Date(System.currentTimeMillis()), basket.getTotal(),new Date(System.currentTimeMillis()+432000000), Order.Status.PROCESSED, shippingAddress.getAddress_id(),billingAddress.getAddress_id(),user.getUserName());
+        DataBaseQueries.addNewOrder(order);
         LookInnaBookFrame.userBasket = new Basket();
         this.dispose();
     }

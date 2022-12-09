@@ -1,17 +1,21 @@
 public class Publisher {
     private String name;
-    private String phone;
+    private long phone;
     private String email;
-    private String bankAccount;
+    private long bankAccount;
 
-    private Address address;
+    private int AddressID;
 
-    public Publisher(String name, String phone, String email, String bankAccount, Address address) {
+    public int getAddressID() {
+        return AddressID;
+    }
+
+    public Publisher(String name, long phone, String email, long bankAccount, int AddressID) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.bankAccount = bankAccount;
-        this.address = address;
+        this.AddressID = AddressID;
     }
 
     public String getName() {
@@ -22,11 +26,11 @@ public class Publisher {
         this.name = lastName;
     }
 
-    public String getPhone() {
+    public long getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(long phone) {
         this.phone = phone;
     }
 
@@ -38,11 +42,11 @@ public class Publisher {
         this.email = email;
     }
 
-    public String getBankAccount() {
+    public long getBankAccount() {
         return bankAccount;
     }
 
-    public void setBankAccount(String bankAccount) {
+    public void setBankAccount(long bankAccount) {
         this.bankAccount = bankAccount;
     }
 }

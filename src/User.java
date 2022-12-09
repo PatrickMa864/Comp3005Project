@@ -4,15 +4,15 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
-    private Address address;
+    private int addressID;
 
-    public User(String userName, String password, String firstName, String lastName, String email, Address address) {
+    public User(String userName, String password, String firstName, String lastName, String email, int addressID) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.address = address;
+        this.addressID = addressID;
     }
     public User(){
         this.userName = "";
@@ -20,7 +20,7 @@ public class User {
         this.firstName = "";
         this.lastName = "";
         this.email = "";
-        this.address = null;
+        this.addressID = 0;
     }
 
     public String getFirstName() {
@@ -55,12 +55,12 @@ public class User {
         this.email = email;
     }
 
-    public Address getAddress() {
-        return address;
+    public int getAddress() {
+        return addressID;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setAddress(int address) {
+        this.addressID = address;
     }
 
     public String getPassword() {

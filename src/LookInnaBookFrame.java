@@ -2,12 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import static java.lang.String.valueOf;
@@ -126,7 +122,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                 JPanel bookPanel2 = new JPanel(new GridBagLayout());
                 bookPanel2.setBackground(new Color(75, 179, 101));
                 bookPanel.setPreferredSize(new Dimension(330, 200));
-                headerLabel = new JLabel("Title: " + book.getTitle());
+                headerLabel = new JLabel("Title: " + book.getName());
                 amountLabel[counter] = new JLabel("Stock: " + book.getNumCopies());
                 c.gridwidth = 1;
                 c.fill = 0;
@@ -145,13 +141,14 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                         Book b = book;
                         if (b.getNumCopies() > 0) {
                             b.setNumCopies(b.getNumCopies() - 1);
-                            if (userBasket.hasBook(b.getTitle())) {
+                            if (userBasket.hasBook(b.getName())) {
                                 Book b2 = userBasket.getBook(b.getISBN());
                                 b2.setNumCopies(b2.getNumCopies() + 1);
 
                             } else {
-                                userBasket.getBooks().add(new Book(b.getTitle(), b.getAuthor(), b.getISBN(), b.getPublisher(), b.getPrice(), b.getNumPages(), b.getGenre(), 1, b.getVersion(), b.getPublisherRoyalty(), b.getPublishedYear()));
+                                userBasket.getBooks().add(new Book(b.getISBN(), b.getName(), b.getGenre(), b.getNumCopies(), b.getPrice(), b.getNumPages(), b.getVersion(), b.getPublisherRoyalty(), b.getPublishedYear(), b.getPublisherName()));
                             }
+
                             DataBaseQueries.addBookToBasket(currentUser, book);
 
                         } else {
@@ -166,13 +163,13 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                 removeButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         Book b = userBasket.getBook(book.getISBN());
-                        if (userBasket.hasBook(book.getTitle())) {
+                        if (userBasket.hasBook(book.getName())) {
                             b.setNumCopies(b.getNumCopies() - 1);
                             book.setNumCopies(book.getNumCopies() + 1);
                             if (b.getNumCopies() == 0) {
                                 userBasket.removeBook(b.getISBN());
                             }
-
+                            DataBaseQueries.deleteBookFromBasket(currentUser,book);
                         } else {
                             JOptionPane.showMessageDialog(null, "Book not found in cart");
                         }
@@ -242,6 +239,9 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
 
             this.setVisible(true);
         }
+        DataBaseQueries.updateAddressCount();
+        DataBaseQueries.updateOrderCount();
+        DataBaseQueries.updateUserCount();
     }
 
 
@@ -279,7 +279,6 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             switch (s) {
                 case "Search" -> {
                     new SearchFrame(library);
-                    this.setVisible(false);
                 }
                 case "Checkout" -> new CheckoutFrame(currentUser, userBasket.getTotal(), userBasket, this);
             }
@@ -289,26 +288,6 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
     }
 
     public static void main(String[] args) {
-        ArrayList<Book> library = new ArrayList<>();
-        ArrayList<User> users = new ArrayList<>();
-        Author a1 = new Author("Charles", "Dickens");
-        Address addy0 = new Address(11, 10, "Nine st.",1000, "eight", Address.Provinces[4], "Six", "five43");
-        Publisher p1 = new Publisher("a","b", "c", "d", addy0 );
-        Book b1 = new Book("the book", a1, 1, p1, 3.00, 100, Book.Genres[1],4,1,1.00, 2000 );
-        Book b2 = new Book("the book2", a1, 2, p1, 3.00, 100, Book.Genres[2], 3,2,1.00 ,2005);
-        Book b3 = new Book("the book3", a1, 3, p1, 3.00, 100, Book.Genres[3], 2,3,1.00 , 2010);
-        library.add(b1);
-        library.add(b2);
-        library.add(b3);
-        Address addy1 = new Address(11, 10, "Nine st.",1000, "eight", Address.Provinces[4], "Six", "five43");
-        User user1 = new User("PM", "password", "Pat", "M", "pm@g.co", addy1);
-        User user2 = new User("PM2", "password2","Pat2", "M2",  "pm@g.co", addy1);
-        users.add(user1);
-        users.add(user2);
-
-
-        new LookInnaBookFrame(new Basket(library), DataBaseQueries.makeUserList(),false);
+        new LookInnaBookFrame(new Basket(DataBaseQueries.getAvailableBooks()), DataBaseQueries.makeUserList(),false);
     }
-
-
 }

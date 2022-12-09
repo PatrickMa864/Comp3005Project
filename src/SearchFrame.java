@@ -2,8 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Objects;
 
 import static java.lang.String.valueOf;
@@ -97,7 +95,7 @@ public class SearchFrame extends JFrame implements ActionListener {
         this.pack();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setTitle("LookInnaBook");
         this.setVisible(true);
 
@@ -130,20 +128,20 @@ public class SearchFrame extends JFrame implements ActionListener {
         for(Book b : library.getBooks()){
             if (careAboutGenre){
                 if (b.getGenre().equalsIgnoreCase(genre)) {
-                    if (b.getTitle().toUpperCase().contains(searchWord.toUpperCase())) {
+                    if (b.getName().toUpperCase().contains(searchWord.toUpperCase())) {
                         LookInnaBookFrame.searchBasket.addBook(b);
                     } else if (valueOf(b.getISBN()).equals(searchWord)) {
                         LookInnaBookFrame.searchBasket.addBook(b);
-                    } else if (b.getAuthor().getFirstName().toUpperCase().contains(searchWord.toUpperCase()) || b.getAuthor().getLastName().toUpperCase().contains(searchWord.toUpperCase())) {
+                    } else if (DataBaseQueries.getAuthorByISBN(b.getISBN()).getFirstName().toUpperCase().contains(searchWord.toUpperCase()) || DataBaseQueries.getAuthorByISBN(b.getISBN()).getLastName().toUpperCase().contains(searchWord.toUpperCase())) {
                         LookInnaBookFrame.searchBasket.addBook(b);
                     }
                 }
             }else{
-                if (b.getTitle().toUpperCase().contains(searchWord.toUpperCase())) {
+                if (b.getName().toUpperCase().contains(searchWord.toUpperCase())) {
                     LookInnaBookFrame.searchBasket.addBook(b);
                 } else if (valueOf(b.getISBN()).equals(searchWord)) {
                     LookInnaBookFrame.searchBasket.addBook(b);
-                } else if (b.getAuthor().getFirstName().toUpperCase().contains(searchWord.toUpperCase()) || b.getAuthor().getLastName().toUpperCase().contains(searchWord.toUpperCase())) {
+                } else if (DataBaseQueries.getAuthorByISBN(b.getISBN()).getFirstName().toUpperCase().contains(searchWord.toUpperCase()) || DataBaseQueries.getAuthorByISBN(b.getISBN()).getLastName().toUpperCase().contains(searchWord.toUpperCase())) {
                     LookInnaBookFrame.searchBasket.addBook(b);
                 }
             }
