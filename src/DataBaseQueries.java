@@ -16,7 +16,7 @@ public class DataBaseQueries {
 
     static {
         try {
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + DATABASE, USER, "Aks2392002");
+            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + DATABASE, USER, "password");
             statement = connection.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -132,7 +132,7 @@ public class DataBaseQueries {
         boolean found = false;
         int quantity = 0;
         try {
-            ResultSet result = statement.executeQuery("SELECT user_name, isbn FROM addtobasket");
+            ResultSet result = statement.executeQuery("SELECT * FROM addtobasket");
             while (result.next()) {
                 if (result.getString("user_name").equals(user.getUserName()) && result.getLong("isbn") == book.getISBN()) {
                     found = true;
@@ -140,8 +140,9 @@ public class DataBaseQueries {
                     break;
                 }
             }
+
             if (found) {
-                statement.executeUpdate(String.format("UPDATE addtobasket SET quantity='%d' WHERE user_name='%s', isbn='%d%n'", quantity + 1, user.getUserName(), book.getISBN()));
+                statement.executeUpdate(String.format("UPDATE addtobasket SET quantity='%d' WHERE user_name='%s' and isbn='%d%n'", quantity + 1, user.getUserName(), book.getISBN()));
             } else {
                 statement.executeUpdate(String.format("INSERT into addtobasket values ('%s','%d%n','%d')", user.getUserName(), book.getISBN(), 1));
             }
@@ -158,7 +159,7 @@ public class DataBaseQueries {
         boolean found = false;
         int quantity = 0;
         try {
-            ResultSet result = statement.executeQuery("SELECT user_name, isbn FROM addtobasket");
+            ResultSet result = statement.executeQuery("SELECT * FROM addtobasket");
             while (result.next()) {
                 if (result.getString("user_name").equals(user.getUserName()) && result.getLong("isbn") == book.getISBN()) {
                     found = true;
@@ -166,8 +167,8 @@ public class DataBaseQueries {
                     break;
                 }
             }
-            if (found && quantity < 1) {
-                statement.executeUpdate(String.format("UPDATE addtobasket SET quantity='%d' WHERE user_name='%s', isbn='%d%n'", quantity - 1, user.getUserName(), book.getISBN()));
+            if (found && (quantity > 1)) {
+                statement.executeUpdate(String.format("UPDATE addtobasket SET quantity='%d' WHERE user_name='%s' and isbn='%d%n'", quantity - 1, user.getUserName(), book.getISBN()));
             }
             else if(found){
                 statement.executeUpdate(String.format("DELETE FROM addtobasket WHERE user_name = '%s' AND ISBN = '%d%n'", user.getUserName(), book.getISBN()));

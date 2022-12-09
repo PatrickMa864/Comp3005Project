@@ -121,7 +121,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                 JPanel bookPanel = new JPanel(new GridLayout());
                 JPanel bookPanel2 = new JPanel(new GridBagLayout());
                 bookPanel2.setBackground(new Color(75, 179, 101));
-                bookPanel.setPreferredSize(new Dimension(330, 200));
+                bookPanel.setPreferredSize(new Dimension(350, 200));
                 headerLabel = new JLabel("Title: " + book.getName());
                 amountLabel[counter] = new JLabel("Stock: " + book.getNumCopies());
                 c.gridwidth = 1;
@@ -129,10 +129,11 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                 c.ipady = 0;
                 c.weighty = 1.0D;
                 c.weightx = 0.0D;
-                c.anchor = 23;
+                c.anchor = GridBagConstraints.FIRST_LINE_START;
                 c.gridy = 0;
                 c.gridx = 0;
                 bookPanel2.add(headerLabel, c);
+                c.anchor = GridBagConstraints.FIRST_LINE_END;
                 c.gridx = 2;
                 bookPanel2.add(amountLabel[counter], c);
                 JButton addButton = new JButton("Add (1) to Cart");
@@ -146,7 +147,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                                 b2.setNumCopies(b2.getNumCopies() + 1);
 
                             } else {
-                                userBasket.getBooks().add(new Book(b.getISBN(), b.getName(), b.getGenre(), b.getNumCopies(), b.getPrice(), b.getNumPages(), b.getVersion(), b.getPublisherRoyalty(), b.getPublishedYear(), b.getPublisherName()));
+                                userBasket.getBooks().add(new Book(b.getISBN(), b.getName(), b.getGenre(), 1, b.getPrice(), b.getNumPages(), b.getVersion(), b.getPublisherRoyalty(), b.getPublishedYear(), b.getPublisherName()));
                             }
 
                             DataBaseQueries.addBookToBasket(currentUser, book);
@@ -196,8 +197,6 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                 bookPanel.add(bookPanel2);
                 bookPanels[counter] = bookPanel;
                 bodyPanel.add(bookPanels[counter]);
-
-
             }
 
             JButton viewBasket = new JButton("View Basket");
