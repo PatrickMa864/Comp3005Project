@@ -16,7 +16,7 @@ public class DataBaseQueries {
 
     static {
         try {
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + DATABASE, USER, "password");
+            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + DATABASE, USER, "Aks2392002");
             statement = connection.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
