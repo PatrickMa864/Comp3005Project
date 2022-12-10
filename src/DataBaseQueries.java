@@ -28,6 +28,7 @@ public class DataBaseQueries {
      * @return an ArrayList of all users currently registers on the system
      */
     public static ArrayList<User> makeUserList() {
+        int counter = 0;
         ArrayList<User> users = new ArrayList<>();
         try {
             ResultSet result = statement.executeQuery("SELECT * FROM users");
@@ -36,7 +37,7 @@ public class DataBaseQueries {
                     users.add(new User(result.getString("user_name"), result.getString("password"),
                         result.getString("first_name"), result.getString("last_name"),
                         result.getString("email"), result.getInt("address_id")));
-                System.out.println(users.get(0).getUserName());
+                System.out.println(users.get(counter++).getUserName());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -250,4 +251,30 @@ public class DataBaseQueries {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     *
+     * @param user add the user to the list of users in the DataBase
+     */
+    public static void addNewUser(User user){
+        try {
+            statement.executeUpdate(String.format("INSERT into users values ('%s','%s','%s','%s','%s', '%d')",
+                    user.getUserName(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getAddress()));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void getUser(User user){
+        try {
+            statement.executeUpdate(String.format("INSERT into user values ('%s','%s','%s','%s','%s', '%d')",
+                    user.getUserName(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getAddress()));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

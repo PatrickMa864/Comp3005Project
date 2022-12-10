@@ -21,12 +21,12 @@ public class SearchFrame extends JFrame implements ActionListener {
 
     public SearchFrame(Basket library){
         this.library = library;
-        JPanel searchPanel = new JPanel();
+        //JPanel searchPanel = new JPanel();
         JLabel searchLabel = new JLabel("Search by Title/Author/ISBN: ");
         JLabel genreLabel = new JLabel("Filter by Genre:");
-        searchPanel.setLayout(new BorderLayout());
+        //searchPanel.setLayout(new BorderLayout());
         searchLabel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
-        searchPanel.add(searchLabel, BorderLayout.PAGE_START);
+        //searchPanel.add(searchLabel, BorderLayout.PAGE_START);
 
         errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         errorLabel.setMaximumSize(new Dimension(200, 20));
@@ -89,7 +89,6 @@ public class SearchFrame extends JFrame implements ActionListener {
         gbc.gridx = 2;
         mainSearchPanel.add(genreList, gbc);
 
-        searchPanel.add(mainSearchPanel);
         this.add(mainSearchPanel);
 
         this.pack();
@@ -147,7 +146,9 @@ public class SearchFrame extends JFrame implements ActionListener {
             }
         }
         System.out.println(LookInnaBookFrame.searchBasket.printBasket());
-        new LookInnaBookFrame(LookInnaBookFrame.searchBasket, LookInnaBookFrame.users, true);
+
+        new LookInnaBookFrame(LookInnaBookFrame.searchBasket, LookInnaBookFrame.users, true, false);
+
         this.dispose();
 
     }

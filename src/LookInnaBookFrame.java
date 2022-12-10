@@ -11,11 +11,12 @@ import static java.lang.String.valueOf;
 public class LookInnaBookFrame extends JFrame implements LookInnaBookView, ActionListener {
     private Basket library;
     static ArrayList<User> users;
-    private User currentUser;
+    public static User currentUser;
     private LookInnaBookModel model;
     public static Basket userBasket;
     public static Basket searchBasket;
     private Basket displayBasket;
+    private boolean registered;
     private boolean loggedIn;
     private JMenuBar menuBar;
     private JMenu menu;
@@ -23,12 +24,17 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
     private JLabel[] amountLabel;
 
 
-    public LookInnaBookFrame(Basket library, ArrayList<User> users, boolean loggedIn){
+    public LookInnaBookFrame(Basket library, ArrayList<User> users, boolean loggedIn, boolean registered){
         super("LookInnaBook");
         this.library = library;
         this.users = users;
         this.loggedIn = loggedIn;
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.registered = registered;
+        if(loggedIn){
+            this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        } else {
+            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
         userBasket = new Basket();
 
 
@@ -74,23 +80,14 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                         }
                     }
                 } else {
-                    String userName = "";
-                    usernamefield:
-                    while (userName != null) {
-                        String newUsername = JOptionPane.showInputDialog(null, "Please enter a Username:");
-                        for (User u : users) {
-                            if (u.getUserName().equals(newUsername)) {
-                                JOptionPane.showMessageDialog(null, "Username alreadt exist");
-                                break;
-                            }
-                        }
-                    }
+                    new RegisterFrame(library);
+
                 }
             }
-        } else {
+        } else if (!registered) {
             currentUser = new User();
-
         }
+        //System.out.println(currentUser.getUserName());
 
         if(currentUser!=null) {
             displayBasket = this.library;
@@ -214,8 +211,8 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             c.gridx = 1;
 
             JButton searchButton = new JButton("Search");
-
-            if(loggedIn) {
+            System.out.println(registered);
+            if(loggedIn && !registered) {
                 searchButton.setText("Back");
             } else{
                 sidePanel.add(checkoutButton, c);
@@ -287,6 +284,6 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
     }
 
     public static void main(String[] args) {
-        new LookInnaBookFrame(new Basket(DataBaseQueries.getAvailableBooks()), DataBaseQueries.makeUserList(),false);
+        new LookInnaBookFrame(new Basket(DataBaseQueries.getAvailableBooks()), DataBaseQueries.makeUserList(), false, false);
     }
 }
