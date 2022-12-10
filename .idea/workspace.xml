@@ -4,17 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e337018-7441-496e-9228-66c44eca41a0" name="Default Changelist" comment="add and remove work with addtobasket">
-      <change afterPath="$PROJECT_DIR$/src/RegisterFrame.java" afterDir="false" />
+    <list default="true" id="3e337018-7441-496e-9228-66c44eca41a0" name="Default Changelist" comment="Register implemeted">
+      <change afterPath="$PROJECT_DIR$/src/ManagerAddFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/CheckoutFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/CheckoutFrame.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/DataBaseQueries.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/DataBaseQueries.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/LookInnaBookFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/LookInnaBookFrame$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/LookInnaBookFrame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/LookInnaBookFrame$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/LookInnaBookFrame$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/LookInnaBookFrame$3.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/LookInnaBookFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/LookInnaBookFrame.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/SearchFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/SearchFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CheckoutFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CheckoutFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataBaseQueries.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBaseQueries.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/LookInnaBookFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LookInnaBookFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RegisterFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RegisterFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SearchFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SearchFrame.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -95,11 +98,19 @@
       <option name="project" value="LOCAL" />
       <updated>1670567416004</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Register implemeted">
+      <created>1670650737776</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1670650737776</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add and remove work with addtobasket" />
-    <option name="LAST_COMMIT_MESSAGE" value="add and remove work with addtobasket" />
+    <MESSAGE value="Register implemeted" />
+    <option name="LAST_COMMIT_MESSAGE" value="Register implemeted" />
   </component>
 </project>

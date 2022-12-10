@@ -410,7 +410,7 @@ public class CheckoutFrame extends JFrame implements ActionListener{
         this.pack();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setTitle("LookInnaBook");
         this.setVisible(true);
 

@@ -18,18 +18,20 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
     private Basket displayBasket;
     private boolean registered;
     private boolean loggedIn;
+    private boolean isManager;
     private JMenuBar menuBar;
     private JMenu menu;
     private JMenuItem m1, m2;
     private JLabel[] amountLabel;
 
 
-    public LookInnaBookFrame(Basket library, ArrayList<User> users, boolean loggedIn, boolean registered){
+    public LookInnaBookFrame(Basket library, ArrayList<User> users, boolean loggedIn, boolean registered, boolean isManager){
         super("LookInnaBook");
         this.library = library;
         this.users = users;
         this.loggedIn = loggedIn;
         this.registered = registered;
+        this.isManager = isManager;
         if(loggedIn){
             this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         } else {
@@ -66,7 +68,6 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                                 String password = JOptionPane.showInputDialog(null, "Please enter your password");
                                 if (u.getPassword().equals(password)) {
                                     currentUser = u;
-                                    System.out.println("welcome");
                                     break usernamefield;
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Password Failed");
@@ -81,13 +82,13 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                     }
                 } else {
                     new RegisterFrame(library);
-
                 }
+            } else {
+                new LookInnaBookFrame(library, users, true, false, true);
             }
         } else if (!registered) {
             currentUser = new User();
         }
-        //System.out.println(currentUser.getUserName());
 
         if(currentUser!=null) {
             displayBasket = this.library;
@@ -137,20 +138,27 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                 addButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         Book b = book;
-                        if (b.getNumCopies() > 0) {
-                            b.setNumCopies(b.getNumCopies() - 1);
-                            if (userBasket.hasBook(b.getName())) {
-                                Book b2 = userBasket.getBook(b.getISBN());
-                                b2.setNumCopies(b2.getNumCopies() + 1);
+                        if (!isManager) {
+                            if (b.getNumCopies() > 0) {
+                                b.setNumCopies(b.getNumCopies() - 1);
+                                if (userBasket.hasBook(b.getName())) {
+                                    Book b2 = userBasket.getBook(b.getISBN());
+                                    b2.setNumCopies(b2.getNumCopies() + 1);
+
+                                } else {
+                                    userBasket.getBooks().add(new Book(b.getISBN(), b.getName(), b.getGenre(), 1, b.getPrice(), b.getNumPages(), b.getVersion(), b.getPublisherRoyalty(), b.getPublishedYear(), b.getPublisherName()));
+                                }
+
+                                DataBaseQueries.addBookToBasket(currentUser, book);
 
                             } else {
-                                userBasket.getBooks().add(new Book(b.getISBN(), b.getName(), b.getGenre(), 1, b.getPrice(), b.getNumPages(), b.getVersion(), b.getPublisherRoyalty(), b.getPublishedYear(), b.getPublisherName()));
+                                JOptionPane.showMessageDialog(null, "Book out of stock");
                             }
-
-                            DataBaseQueries.addBookToBasket(currentUser, book);
-
                         } else {
-                            JOptionPane.showMessageDialog(null, "Book out of stock");
+                            if(b.getNumCopies()>0) {
+                                b.setNumCopies(b.getNumCopies() - 1);
+                                DataBaseQueries.updateBookAmount(b,true);
+                            }
                         }
                         model.updateViews();
 
@@ -160,16 +168,21 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                 removeButton.addActionListener(controller);
                 removeButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        Book b = userBasket.getBook(book.getISBN());
-                        if (userBasket.hasBook(book.getName())) {
-                            b.setNumCopies(b.getNumCopies() - 1);
-                            book.setNumCopies(book.getNumCopies() + 1);
-                            if (b.getNumCopies() == 0) {
-                                userBasket.removeBook(b.getISBN());
+                        Book b = book;
+                        if (!isManager) {
+                            if (userBasket.hasBook(book.getName())) {
+                                b.setNumCopies(b.getNumCopies() - 1);
+                                book.setNumCopies(book.getNumCopies() + 1);
+                                if (b.getNumCopies() == 0) {
+                                    userBasket.removeBook(b.getISBN());
+                                }
+                                DataBaseQueries.deleteBookFromBasket(currentUser, book);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Book not found in cart");
                             }
-                            DataBaseQueries.deleteBookFromBasket(currentUser,book);
                         } else {
-                            JOptionPane.showMessageDialog(null, "Book not found in cart");
+                            b.setNumCopies(b.getNumCopies() + 1);
+                            DataBaseQueries.updateBookAmount(b,false);
                         }
                         model.updateViews();
                     }
@@ -194,9 +207,18 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                 bookPanel.add(bookPanel2);
                 bookPanels[counter] = bookPanel;
                 bodyPanel.add(bookPanels[counter]);
+
+                if(isManager){
+                    removeButton.setText("Add (1) stock");
+                    addButton.setText("Remove (1) stock");
+                }
             }
 
             JButton viewBasket = new JButton("View Basket");
+            if(isManager){
+                viewBasket.setText("Add New Book");
+            }
+
             viewBasket.addActionListener(this);
 
 
@@ -211,10 +233,10 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             c.gridx = 1;
 
             JButton searchButton = new JButton("Search");
-            System.out.println(registered);
-            if(loggedIn && !registered) {
+
+            if(loggedIn && !registered && !isManager) {
                 searchButton.setText("Back");
-            } else{
+            } else if (!isManager){
                 sidePanel.add(checkoutButton, c);
             }
             searchButton.addActionListener(this);
@@ -232,8 +254,16 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
             mainPanel.add(sidePanel, "East");
             this.add(mainPanel);
 
+            if(!currentUser.getUserName().equals("")){
+                loggedIn = true;
+            }
+
 
             this.setVisible(true);
+            if(!isManager && !registered && !loggedIn){
+                this.dispose();
+            }
+
         }
         DataBaseQueries.updateAddressCount();
         DataBaseQueries.updateOrderCount();
@@ -263,10 +293,13 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                         JOptionPane.showMessageDialog(basket, "VIEWING BASKET:" + "\n" + userBasket.printBasket() + "\nTOTAL: $" + userBasket.getTotal());
                 }
                 case "Search" -> {
-                    new SearchFrame(library);
+                    new SearchFrame(library, isManager);
                 }
                 case "Back" -> {
                     this.dispose();
+                }
+                case "Add New Book" -> {
+
                 }
 
                 default -> System.out.println("Error");
@@ -274,7 +307,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
         }else {
             switch (s) {
                 case "Search" -> {
-                    new SearchFrame(library);
+                    new SearchFrame(library, isManager);
                 }
                 case "Checkout" -> new CheckoutFrame(currentUser, userBasket.getTotal(), userBasket, this);
             }
@@ -284,6 +317,6 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
     }
 
     public static void main(String[] args) {
-        new LookInnaBookFrame(new Basket(DataBaseQueries.getAvailableBooks()), DataBaseQueries.makeUserList(), false, false);
+        new LookInnaBookFrame(new Basket(DataBaseQueries.getAvailableBooks()), DataBaseQueries.makeUserList(), false, false, false);
     }
 }

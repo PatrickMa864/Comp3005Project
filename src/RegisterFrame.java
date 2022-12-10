@@ -231,18 +231,34 @@ public class RegisterFrame extends JFrame implements ActionListener {
     }
 
     public void register(){
-        JOptionPane.showMessageDialog(null, "Registered!" );
+        boolean accepted = true;
+
         DataBaseQueries.noOfAddressID+=1;
         Address address = new Address(DataBaseQueries.noOfAddressID, Integer.parseInt(apartmentNumTF.getText()), streetNameTF.getText(), Integer.parseInt(streetNumTF.getText()),
                 cityTF.getText(), Objects.requireNonNull(provinceCB.getSelectedItem()).toString(), countryTF.getText(), postalCodeTF.getText());
         DataBaseQueries.addNewAddress(address);
         DataBaseQueries.noOfUsers+=1;
-        User user = new User(usernameTF.getText(), passwordTF.getText(), firstNameTF.getText(),
-                lastNameTF.getText(), emailTF.getText(),DataBaseQueries.noOfAddressID);
-        DataBaseQueries.addNewUser(user);
-        LookInnaBookFrame.currentUser = user;
-        new LookInnaBookFrame(library, LookInnaBookFrame.users, true, true);
-        this.dispose();
+        for(User u : LookInnaBookFrame.users){
+            if (emailTF.getText().equals(u.getEmail()) ){
+                JOptionPane.showMessageDialog(null, "Email is already registered");
+                accepted = false;
+                break;
+            }else if(usernameTF.getText().equals(u.getUserName())) {
+                JOptionPane.showMessageDialog(null, "Username is already registered");
+                accepted = false;
+                break;
+            }
+        }
+        if (accepted) {
+            JOptionPane.showMessageDialog(null, "Registered!" );
+            User user = new User(usernameTF.getText(), passwordTF.getText(), firstNameTF.getText(),
+                    lastNameTF.getText(), emailTF.getText(), DataBaseQueries.noOfAddressID);
+            DataBaseQueries.addNewUser(user);
+            LookInnaBookFrame.currentUser = user;
+            new LookInnaBookFrame(library, LookInnaBookFrame.users, true, true, false);
+            this.dispose();
+        }
+
     }
 
 }

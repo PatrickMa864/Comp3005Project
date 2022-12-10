@@ -18,15 +18,16 @@ public class SearchFrame extends JFrame implements ActionListener {
 
 
     private Basket library;
+    private boolean isManager;
 
-    public SearchFrame(Basket library){
+    public SearchFrame(Basket library, boolean isManager){
         this.library = library;
-        //JPanel searchPanel = new JPanel();
+        this.isManager = isManager;
         JLabel searchLabel = new JLabel("Search by Title/Author/ISBN: ");
         JLabel genreLabel = new JLabel("Filter by Genre:");
-        //searchPanel.setLayout(new BorderLayout());
+
         searchLabel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
-        //searchPanel.add(searchLabel, BorderLayout.PAGE_START);
+
 
         errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         errorLabel.setMaximumSize(new Dimension(200, 20));
@@ -35,7 +36,7 @@ public class SearchFrame extends JFrame implements ActionListener {
         errorLabel.setBorder(null);
 
         Container c = this.getContentPane();
-        // Clear GUI in order to reload
+
         this.setPreferredSize(new Dimension(500, 150));
         this.setMaximumSize(new Dimension(500, 150));
         if (this.getJMenuBar() != null) this.getJMenuBar().setVisible(false);
@@ -147,7 +148,7 @@ public class SearchFrame extends JFrame implements ActionListener {
         }
         System.out.println(LookInnaBookFrame.searchBasket.printBasket());
 
-        new LookInnaBookFrame(LookInnaBookFrame.searchBasket, LookInnaBookFrame.users, true, false);
+        new LookInnaBookFrame(LookInnaBookFrame.searchBasket, LookInnaBookFrame.users, true, false, isManager);
 
         this.dispose();
 

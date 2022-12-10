@@ -276,5 +276,37 @@ public class DataBaseQueries {
         }
     }
 
+    public static void addNewBook(Book book){
+        try {
+            statement.executeUpdate(String.format("INSERT into book values ('%d%n','%s','%s', '%d', '%f', '%d', '%d', '%f', '%tF', '%s')",
+                    book.getISBN(), book.getName(), book.getGenre(), book.getNumCopies(), book.getPrice(), book.getNumPages(),
+                    book.getVersion(), book.getPublisherRoyalty(), book.getPublishedYear(), book.getPublisherName()));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateBookAmount(Book book, boolean addRemove){
+        int quantity = 0;
+
+        try {
+            ResultSet result = statement.executeQuery("SELECT * FROM book");
+            while (result.next()) {
+                if (result.getLong("isbn") == book.getISBN()) {
+                    quantity = result.getInt("no_of_copies");
+                    break;
+                }
+            }
+            if(addRemove) {
+                statement.executeUpdate(String.format("UPDATE book SET no_of_copies='%d' WHERE isbn='%d%n'", quantity - 1, book.getISBN()));
+            } else {
+                statement.executeUpdate(String.format("UPDATE book SET no_of_copies='%d' WHERE isbn='%d%n'", quantity + 1, book.getISBN()));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }
