@@ -28,7 +28,6 @@ public class DataBaseQueries {
      * @return an ArrayList of all users currently registers on the system
      */
     public static ArrayList<User> makeUserList() {
-        int counter = 0;
         ArrayList<User> users = new ArrayList<>();
         try {
             ResultSet result = statement.executeQuery("SELECT * FROM users");
@@ -37,7 +36,6 @@ public class DataBaseQueries {
                     users.add(new User(result.getString("user_name"), result.getString("password"),
                         result.getString("first_name"), result.getString("last_name"),
                         result.getString("email"), result.getInt("address_id")));
-                System.out.println(users.get(counter++).getUserName());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -253,8 +251,8 @@ public class DataBaseQueries {
     }
 
     /**
-     *
-     * @param user add the user to the list of users in the DataBase
+     * This method add a given user to the lis tof user in the dataBase
+     * @param user a User to be added to the dataBase
      */
     public static void addNewUser(User user){
         try {
@@ -266,16 +264,11 @@ public class DataBaseQueries {
         }
     }
 
-    public static void getUser(User user){
-        try {
-            statement.executeUpdate(String.format("INSERT into user values ('%s','%s','%s','%s','%s', '%d')",
-                    user.getUserName(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getAddress()));
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    /**
+     * This method adds a new book to the list of books in the database
+     * @param book the book to be added to the list of books in the store
+     */
     public static void addNewBook(Book book){
         try {
             statement.executeUpdate(String.format("INSERT into book values ('%d%n','%s','%s', '%d', '%f', '%d', '%d', '%f', '%tF', '%s')",
@@ -286,6 +279,13 @@ public class DataBaseQueries {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * This method updates the quantity of a corresponding book in the store,
+     * @param book the book to update its quantity
+     * @param addRemove boolean representing if book quantity to be incremented or decremented. If true the quantity for
+     *the passed book is incremented by one. If false it gets decremented by one
+     */
 
     public static void updateBookAmount(Book book, boolean addRemove){
         int quantity = 0;
@@ -307,6 +307,97 @@ public class DataBaseQueries {
             throw new RuntimeException(e);
         }
     }
+
+
+    /**
+     * @param publisher add the publisher to list of publishers in the dataBase
+     */
+    public static void addNewPublisher(Publisher publisher){
+        try {
+            statement.executeUpdate(String.format("INSERT into  publisher ('%s','%s','%d%n', '%d%n', '%d')",
+                    publisher.getName(), publisher.getEmail(), publisher.getPhone(), publisher.getBankAccount(), publisher.getAddressID()));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     *
+     * @param author add the author to list of authors in the dataBase
+     */
+    public static void addNewAuthor(Author author){
+        try {
+            statement.executeUpdate(String.format("INSERT into  AUTHOR ('%s','%s')",
+                    author.getFirstName(), author.getLastName()));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * This method updates the writes table in the dataBase. it sets the author parameter given as thw writer for the passed book
+     * @param author the author to be set as the book writer
+     * @param book the book been written by the passed author
+     */
+    public static void updateWrites(Author author, Book book){
+        try {
+            statement.executeUpdate(String.format("INSERT into WRITES ('%s','%s','%d%n')",
+                    author.getFirstName(), author.getLastName(), book.getISBN()));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * This method returns an arrayList of all the authors in the database
+     * @return an ArrayList of Author
+     */
+
+    public static ArrayList<Author> makeAuthorsList() {
+        ArrayList<Author> authors = new ArrayList<>();
+        try {
+            ResultSet result = statement.executeQuery("SELECT * FROM AUTHOR");
+
+            while (result.next()) {
+                authors.add(new Author(result.getString("first_name"), result.getString("last_name")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return authors;
+    }
+
+
+    /**
+     * This method returns an arrayList of all the publishers in the database
+     * @return an ArrayList of Publisher
+     */
+    public static ArrayList<Publisher> makePublishersList() {
+        ArrayList<Publisher> publishers = new ArrayList<>();
+        try {
+            ResultSet result = statement.executeQuery("SELECT * FROM PUBLISHER");
+
+            while (result.next()) {
+                publishers.add(new Publisher(result.getString("publisher_name"), result.getLong("phone_number"),
+                        result.getString("email"), result.getLong("banking_account"), result.getInt("address_id")));
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return publishers;
+    }
+
+
+
+
+
+
 
 
 }
