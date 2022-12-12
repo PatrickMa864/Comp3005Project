@@ -16,7 +16,9 @@ The deliverables for this project, is the following: Project Report in PDF File.
 1. You can clone the project onto your desired IDE from the GitHub repository
 2. Open a terminal window or command prompt and navigate to the directory where you want to clone the project. 
 3. Use the ‘git clone’ command to clone the project from GitHub. 
+```
 git clone https://github.com/PatrickMa864/Comp3005Project 
+```
 4. Open postgresSQL and create a new dataBase with the name “COMP3005_Project”
 5. Right click on the database created and choose query tools from the shown menu.
 6. Copy paste the DDL file on github to the Query terminal shown and hit run.
