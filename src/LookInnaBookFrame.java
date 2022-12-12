@@ -32,6 +32,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
         this.loggedIn = loggedIn;
         this.registered = registered;
         this.isManager = isManager;
+
         if(loggedIn){
             this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         } else {
@@ -299,7 +300,7 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                     this.dispose();
                 }
                 case "Add New Book" -> {
-
+                    new ManagerAddFrame();
                 }
 
                 default -> System.out.println("Error");

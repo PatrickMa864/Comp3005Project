@@ -112,13 +112,14 @@ public class Book {
 
     public String getInfo(){
         return "Title: " + name +
-        "\nISBN: " + ISBN +
-        "\nPublisher name: " + publisherName +
-        "\nPrice: " + price +
-        "\nNo. Pages: " + numPages +
-        "\nGenre: " + genre +
-        "\nAmount in Stock: " + numCopies +
-        "\nBook Version: " + version;
+                "\nISBN: " + ISBN +
+                "\nPublisher name: " + publisherName +
+                "\nAuthor name: " + DataBaseQueries.getAuthorByISBN(this.getISBN()).getFullName() +
+                "\nPrice: " + price +
+                "\nNo. Pages: " + numPages +
+                "\nGenre: " + genre +
+                "\nAmount in Stock: " + numCopies +
+                "\nBook Version: " + version;
     }
 
 
