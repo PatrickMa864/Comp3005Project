@@ -68,7 +68,7 @@ public class DataBaseQueries {
 
     /**
      *
-     * @return an ArrayList of all the avilable books
+     * @return an ArrayList of all the available books
      */
     public static ArrayList<Book> getAvailableBooks(){
         ArrayList<Book> books = new ArrayList<>();
@@ -87,6 +87,41 @@ public class DataBaseQueries {
     }
 
     /**
+     *
+     * @return an ArrayList of all the orders books
+     */
+    public static ArrayList<Order> getOrders(){
+        ArrayList<Order> orders = new ArrayList<>();
+        try {
+            ResultSet result = statement.executeQuery("SELECT * FROM ORDERS");
+            while (result.next()) {
+                orders.add(new Order(result.getInt("order_no"), result.getDate("initial_date"), result.getDouble("price"), result.getDate("estimate_delivery"),
+                        result.getString("status"), result.getInt("shipping_address_id"), result.getInt("billing_address_id"), result.getString("user_name")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return orders;
+    }
+
+    /**
+     *
+     * @return an ArrayList of all the orders tied to books
+     */
+    public static ArrayList<AddToOrder> getOrdersTiedBooks(){
+        ArrayList<AddToOrder> orders = new ArrayList<>();
+        try {
+            ResultSet result = statement.executeQuery("SELECT * FROM ADDTOORDER");
+            while (result.next()) {
+                orders.add(new AddToOrder(result.getLong("isbn"), result.getInt("order_no")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return orders;
+    }
+
+    /**
      * This method returns an author for a corresponding book through passing the ISBN of that book
      * @param ISBN represents the ISBN for the book
      * @return an author represnting the author of the book, otherwise it returns null
@@ -97,6 +132,27 @@ public class DataBaseQueries {
             while (result.next()) {
                 Author author = new Author(result.getString("first_name"), result.getString("last_name"));
                 return author;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    /**
+     * This method returns an author for a corresponding book through passing the ISBN of that book
+     * @param ISBN represents the ISBN for the book
+     * @return a book represnting the author of the book, otherwise it returns null
+     */
+    public static Book getBookByISBN(long ISBN){
+        try {
+            ResultSet result = statement.executeQuery(String.format("SELECT * from book WHERE ISBN = '%d%n'", ISBN));
+            while (result.next()) {
+                Book book = new Book(result.getLong("ISBN"), result.getString("name"), result.getString("genre"),
+                        result.getInt("no_of_copies"), result.getDouble("price"), result.getInt("no_of_pages"),
+                        result.getInt("version"), result.getDouble("royalty"), result.getDate("published_year"),
+                        result.getString("publisher_name"));
+                return book;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -409,12 +465,12 @@ public class DataBaseQueries {
         return publishersS;
     }
 
-
-
-
-
-
-
-
+    public static void addBookToOrder(Book book, Order order) {
+        try {
+            statement.executeUpdate(String.format("INSERT into addtoorder values('%d', '%d')", book.getISBN(), order.getOrderNo()));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

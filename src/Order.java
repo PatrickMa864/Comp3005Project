@@ -5,15 +5,14 @@ public class Order {
     private Date initialDate;
     private double price;
     private Date estimatedDelivery;
-    public enum Status{
-        PROCESSED, SHIPPED, DELIVERED, RECEIVED
-    };
-    private Status status;
+    public static String[] Status = {"PROCESSED", "SHIPPED", "DELIVERED", "RECEIVED"};
+
+    private String status;
     private int shippingAddressID;
     private int BillingAddressID;
     private String user_name;
 
-    public Order(int orderNo, Date initialDate, double price, Date estimatedDelivery, Status status, int shippingAddressID, int billingAddressID, String user_name) {
+    public Order(int orderNo, Date initialDate, double price, Date estimatedDelivery, String status, int shippingAddressID, int billingAddressID, String user_name) {
         this.orderNo = orderNo;
         this.initialDate = initialDate;
         this.price = price;
@@ -40,7 +39,7 @@ public class Order {
         this.estimatedDelivery = estimatedDelivery;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -72,7 +71,7 @@ public class Order {
         return estimatedDelivery;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 

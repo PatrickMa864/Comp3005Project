@@ -48,6 +48,7 @@ public class CheckoutFrame extends JFrame implements ActionListener{
 
     private int orderNum = 0;
 
+
     public CheckoutFrame(User user, double totalCost, Basket basket, LookInnaBookFrame lookInnaBookFrame) {
 
         JPanel cartPanel = new JPanel();
@@ -455,8 +456,13 @@ public class CheckoutFrame extends JFrame implements ActionListener{
             DataBaseQueries.addNewAddress(billingAddress);
         }
         DataBaseQueries.noOfOrderID += 1;
-        Order order = new Order(DataBaseQueries.noOfOrderID, new Date(System.currentTimeMillis()), basket.getTotal(),new Date(System.currentTimeMillis()+432000000), Order.Status.PROCESSED, shippingAddress.getAddress_id(),billingAddress.getAddress_id(),user.getUserName());
+        Order order = new Order(DataBaseQueries.noOfOrderID, new Date(System.currentTimeMillis()), basket.getTotal(),new Date(System.currentTimeMillis()+432000000), Order.Status[0], shippingAddress.getAddress_id(),billingAddress.getAddress_id(),user.getUserName());
         DataBaseQueries.addNewOrder(order);
+
+        for(Book b: basket.getBooks()){
+            DataBaseQueries.addBookToOrder(b, order);
+        }
+
         LookInnaBookFrame.userBasket = new Basket();
         this.dispose();
     }

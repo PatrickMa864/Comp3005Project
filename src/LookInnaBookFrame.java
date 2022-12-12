@@ -222,11 +222,21 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
 
             viewBasket.addActionListener(this);
 
-
             c.fill = 2;
             c.anchor = 17;
             c.gridx = 1;
             sidePanel.add(viewBasket, c);
+            c.fill = 2;
+            c.anchor = 12;
+            c.gridx = 1;
+            JButton salesButton = new JButton("See Sales");
+
+            if(isManager){
+                salesButton.addActionListener(this);
+                sidePanel.add(salesButton, c);
+            }
+
+
             JButton checkoutButton = new JButton("Checkout");
             checkoutButton.addActionListener(this);
             c.fill = 2;
@@ -301,6 +311,32 @@ public class LookInnaBookFrame extends JFrame implements LookInnaBookView, Actio
                 }
                 case "Add New Book" -> {
                     new ManagerAddFrame();
+                }
+                case "See Sales"->{
+                    ArrayList<AddToOrder> ato = DataBaseQueries.getOrdersTiedBooks();
+                    String message = "Sales:";
+                    int totalForCurrent = 0;
+                    int counter = 0;
+                    int total = 0;
+                    if(ato.size()>0) {
+                        for (Order order : DataBaseQueries.getOrders()) {
+
+                            for (AddToOrder addToOrder : ato) {
+                                counter++;
+                                totalForCurrent += DataBaseQueries.getBookByISBN(addToOrder.getIsbn()).getPrice();
+                            }
+                            message += "\n" + "ISBN: " + ato.get(counter-1).getIsbn() + "   Total for this book: $" + totalForCurrent;
+
+                            total += order.getPrice();
+                            counter = 0;
+                        }
+                        message += ("\nTotal Revenue: " + total);
+                        System.out.println(message);
+                        JOptionPane.showMessageDialog(null, message);
+                    } else{
+                        JOptionPane.showMessageDialog(null, "No Orders Placed");
+                    }
+                    break;
                 }
 
                 default -> System.out.println("Error");

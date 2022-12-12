@@ -4,15 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e337018-7441-496e-9228-66c44eca41a0" name="Default Changelist" comment="Manager add frame implemented">
-      <change afterPath="$PROJECT_DIR$/src/AuthorAddFrame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PublisherAddFrame.java" afterDir="false" />
+    <list default="true" id="3e337018-7441-496e-9228-66c44eca41a0" name="Default Changelist" comment="Manager add frame fully implemented">
+      <change afterPath="$PROJECT_DIR$/src/AddToOrder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/Book.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/Book.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/CheckoutFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/CheckoutFrame.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/DataBaseQueries.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/DataBaseQueries.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/LookInnaBookFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/LookInnaBookFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/Order$Status.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/Order.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Comp3005Project/Order.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Comp3005Project/Writes.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CheckoutFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CheckoutFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataBaseQueries.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBaseQueries.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/LookInnaBookFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LookInnaBookFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ManagerAddFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ManagerAddFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Writes.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,17 +43,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "jdk.selected.JAVA_MODULE": "openjdk-18",
-    "last_opened_file_path": "C:/Users/patri/OneDrive/Desktop/postgresql-42.5.1.jar",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-18&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/patri/OneDrive/Desktop/postgresql-42.5.1.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="RegisterFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RegisterFrame" />
@@ -106,13 +112,21 @@
       <option name="project" value="LOCAL" />
       <updated>1670714625591</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Manager add frame fully implemented">
+      <created>1670814960873</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1670814960873</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add and remove work with addtobasket" />
     <MESSAGE value="Register implemeted" />
     <MESSAGE value="Manager add frame implemented" />
-    <option name="LAST_COMMIT_MESSAGE" value="Manager add frame implemented" />
+    <MESSAGE value="Manager add frame fully implemented" />
+    <option name="LAST_COMMIT_MESSAGE" value="Manager add frame fully implemented" />
   </component>
 </project>
